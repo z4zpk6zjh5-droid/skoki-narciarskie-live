@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="pl">
 <head>
@@ -5,156 +6,495 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090b10">
 <meta name="description" content="Skoki Narciarskie LIVE – wyniki, terminarz, zawodnicy i aktualności.">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
 <title>Skoki Narciarskie LIVE</title>
+
 <style>
-:root{--bg:#090b10;--panel:#131720;--panel2:#1a202b;--line:#293140;--red:#ed2939;--muted:#9aa5b5;--white:#f5f7fb;--green:#4bd39a}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#29202a 0,transparent 38%),var(--bg);color:var(--white);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}.wrap{max-width:980px;margin:auto;padding:0 16px 100px}.top{display:flex;align-items:center;gap:12px;padding:22px 0 16px}.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#f33,#991323);display:grid;place-items:center;font-size:25px;box-shadow:0 8px 24px #ed293933}.brand{font-weight:900;letter-spacing:.4px;font-size:18px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px}.live{margin-left:auto;background:#3b1119;color:#ff6673;border:1px solid #77232e;border-radius:30px;padding:6px 10px;font-size:11px;font-weight:800}.hero{border:1px solid #49212b;border-radius:22px;padding:23px;background:linear-gradient(120deg,#28131c,#151923 65%,#10151e);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-20px;bottom:-55px;width:210px;height:170px;border-radius:50%;border:2px solid #ffffff12;box-shadow:0 0 0 25px #ffffff08,0 0 0 50px #ffffff05}.eyebrow{color:#ff7781;text-transform:uppercase;font-size:10px;font-weight:900;letter-spacing:2px}.hero h1{font-size:clamp(25px,6vw,39px);line-height:1.08;margin:8px 0}.hero p{color:#c3c8d1;max-width:490px;margin:8px 0 16px}.pill{display:inline-block;background:#ed2939;color:white;padding:8px 13px;border-radius:10px;font-weight:800;font-size:12px}.section{margin-top:25px}.sectionhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.section h2{font-size:19px;margin:0}.sub{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:15px;min-width:0}.card h3{margin:0 0 6px;font-size:15px}.card p{margin:0;color:var(--muted);font-size:12px}.icon{font-size:22px;margin-bottom:9px}.btn{border:0;background:var(--red);color:white;border-radius:10px;padding:10px 13px;font-weight:800;font-size:12px}.btn.secondary{background:var(--panel2);border:1px solid var(--line)}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.toolbar button,.tab{background:var(--panel2);border:1px solid var(--line);color:#dfe4ec;padding:8px 11px;border-radius:9px;font-size:12px}.toolbar button.active,.tab.active{background:#45151f;border-color:#a52b3b;color:#fff}.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}.name{font-weight:750}.muted{color:var(--muted);font-size:12px}.tag{font-size:10px;border-radius:20px;padding:4px 8px;background:#202936;color:#c5cfdd}.flag{font-size:20px}.rank{color:#ff6b77;font-weight:900}.search{width:100%;background:var(--panel);border:1px solid var(--line);color:white;border-radius:10px;padding:11px;margin:8px 0}.view{display:none}.view.active{display:block}.nav{position:fixed;bottom:0;left:0;right:0;background:#0d1119ed;backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex;justify-content:center;padding:8px max(8px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));z-index:5}.navinner{width:min(980px,100%);display:flex;justify-content:space-around}.nav button{border:0;background:none;color:var(--muted);font-size:10px;padding:5px;min-width:54px}.nav button span{display:block;font-size:19px}.nav button.active{color:#ff6572}.notice{background:#1a202b;border-left:3px solid var(--red);padding:12px;border-radius:9px;color:#c4ccd8;font-size:12px;margin-top:12px}.table{width:100%;border-collapse:collapse;font-size:12px}.table td,.table th{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line)}.table th{color:var(--muted);font-weight:600}.pol{color:#ff6572;font-weight:800}.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:var(--panel2);padding:12px;border-radius:12px}.stat b{font-size:20px;display:block}.stat small{color:var(--muted)}footer{text-align:center;color:#6f7b8c;font-size:11px;padding:30px 0 5px}
-@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}.hero{padding:34px}.two{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}}
+:root{
+--bg:#090b10;
+--panel:#131720;
+--panel2:#1a202b;
+--line:#293140;
+--red:#ed2939;
+--muted:#9aa5b5;
+--white:#f5f7fb;
+}
+*{box-sizing:border-box}
+body{
+margin:0;
+background:radial-gradient(ellipse at 80% -10%,#29202a 0,transparent 38%),var(--bg);
+color:var(--white);
+font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.wrap{max-width:980px;margin:auto;padding:0 16px 100px}
+.top{display:flex;align-items:center;gap:12px;padding:22px 0 16px}
+.logo{
+width:48px;height:48px;border-radius:14px;
+background:linear-gradient(145deg,#f33,#991323);
+display:grid;place-items:center;font-size:25px;
+box-shadow:0 8px 24px #ed293933
+}
+.brand{font-weight:900;letter-spacing:.4px;font-size:18px}
+.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px}
+.live{
+margin-left:auto;background:#3b1119;color:#ff6673;
+border:1px solid #77232e;border-radius:30px;
+padding:6px 10px;font-size:11px;font-weight:800
+}
+.hero{
+border:1px solid #49212b;border-radius:22px;padding:23px;
+background:linear-gradient(120deg,#28131c,#151923 65%,#10151e);
+position:relative;overflow:hidden
+}
+.hero:after{
+content:"";position:absolute;right:-20px;bottom:-55px;
+width:210px;height:170px;border-radius:50%;
+border:2px solid #ffffff12;
+box-shadow:0 0 0 25px #ffffff08,0 0 0 50px #ffffff05;
+pointer-events:none
+}
+.eyebrow{
+color:#ff7781;text-transform:uppercase;font-size:10px;
+font-weight:900;letter-spacing:2px
+}
+.hero h1{font-size:clamp(25px,6vw,39px);line-height:1.08;margin:8px 0}
+.hero p{color:#c3c8d1;max-width:490px;margin:8px 0 16px}
+.pill{
+display:inline-block;background:#ed2939;color:white;
+padding:8px 13px;border-radius:10px;font-weight:800;font-size:12px
+}
+.section{margin-top:25px}
+.sectionhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section h2{font-size:19px;margin:0}
+.sub{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.card{
+background:var(--panel);border:1px solid var(--line);
+border-radius:16px;padding:15px;min-width:0
+}
+.clickable{cursor:pointer;transition:border-color .2s,transform .2s}
+.clickable:active{transform:scale(.98)}
+.clickable:hover{border-color:#ed2939}
+.card h3{margin:0 0 6px;font-size:15px}
+.card p{margin:0;color:var(--muted);font-size:12px}
+.icon{font-size:22px;margin-bottom:9px}
+.btn{
+border:0;background:var(--red);color:white;border-radius:10px;
+padding:10px 13px;font-weight:800;font-size:12px
+}
+.btn.secondary{background:var(--panel2);border:1px solid var(--line)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.toolbar button,.tab{
+background:var(--panel2);border:1px solid var(--line);
+color:#dfe4ec;padding:8px 11px;border-radius:9px;font-size:12px
+}
+.toolbar button.active,.tab.active{background:#45151f;border-color:#a52b3b;color:#fff}
+.row{
+display:flex;align-items:center;justify-content:space-between;
+gap:10px;padding:12px 0;border-bottom:1px solid var(--line)
+}
+.row:last-child{border:0}
+.name{font-weight:750}
+.muted{color:var(--muted);font-size:12px}
+.tag{font-size:10px;border-radius:20px;padding:4px 8px;background:#202936;color:#c5cfdd}
+.flag{font-size:20px}
+.rank{color:#ff6b77;font-weight:900}
+.search{
+width:100%;background:var(--panel);border:1px solid var(--line);
+color:white;border-radius:10px;padding:11px;margin:8px 0
+}
+.view{display:none}
+.view.active{display:block}
+.nav{
+position:fixed;bottom:0;left:0;right:0;
+background:#0d1119ed;backdrop-filter:blur(14px);
+border-top:1px solid var(--line);
+display:flex;justify-content:center;
+padding:8px max(8px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));
+z-index:5
+}
+.navinner{width:min(980px,100%);display:flex;justify-content:space-around}
+.nav button{
+border:0;background:none;color:var(--muted);
+font-size:10px;padding:5px;min-width:54px
+}
+.nav button span{display:block;font-size:19px}
+.nav button.active{color:#ff6572}
+.notice{
+background:#1a202b;border-left:3px solid var(--red);
+padding:12px;border-radius:9px;color:#c4ccd8;
+font-size:12px;margin-top:12px
+}
+.table{width:100%;border-collapse:collapse;font-size:12px}
+.table td,.table th{text-align:left;padding:10px 6px;border-bottom:1px solid var(--line)}
+.table th{color:var(--muted);font-weight:600}
+.pol{color:#ff6572;font-weight:800}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.stat{background:var(--panel2);padding:12px;border-radius:12px}
+.stat b{font-size:20px;display:block}
+.stat small{color:var(--muted)}
+footer{text-align:center;color:#6f7b8c;font-size:11px;padding:30px 0 5px}
+a{color:#ff7883}
+@media(min-width:700px){
+.grid{grid-template-columns:repeat(3,1fr)}
+.hero{padding:34px}
+}
 </style>
 </head>
+
 <body>
 <div class="wrap">
-<header class="top"><div class="logo">⛷</div><div class="brand">SKOKI NARCIARSKIE<small>LIVE • POLSKA</small></div><div class="live">● CENTRUM SKOKÓW</div></header>
+
+<header class="top">
+<div class="logo">⛷</div>
+<div class="brand">SKOKI NARCIARSKIE<small>LIVE • POLSKA</small></div>
+<div class="live">● CENTRUM SKOKÓW</div>
+</header>
+
 <main>
+
 <section id="home" class="view active">
-<div class="hero"><div class="eyebrow">Sezon skoków • centrum kibica</div><h1>Emocje zaczynają się<br>na rozbiegu.</h1><p>Wyniki, terminarz, profile zawodników i najważniejsze informacje w jednym miejscu.</p><span class="pill">SKOKI NARCIARSKIE LIVE</span></div>
-<div class="section"><div class="sectionhead"><h2>Najbliższe zawody</h2><span class="tag">Terminarz</span></div><div class="card"><div class="row"><div><div class="name">Kolejny konkurs</div><div class="muted">Po podłączeniu oficjalnego terminarza FIS</div></div><span class="flag">🏔️</span></div><p>Terminy i godziny będą publikowane po weryfikacji w dozwolonym źródle danych.</p><div style="margin-top:12px"><button class="btn" onclick="show('calendar')">Otwórz terminarz</button></div></div></div>
-<div class="section"><div class="sectionhead"><h2>Odkrywaj</h2><span class="sub">Wybierz moduł</span></div><div class="grid">
-<div class="card" onclick="show('results')"><div class="icon">📊</div><h3>Wyniki</h3><p>Serie, punkty, odległości i klasyfikacje.</p></div>
-<div class="card" onclick="show('calendar')"><div class="icon">🗓️</div><h3>Terminarz</h3><p>Konkursy, treningi i przypomnienia.</p></div>
-<div class="card" onclick="show('athletes')"><div class="icon">🧑‍🚀</div><h3>Zawodnicy</h3><p>Profile, statystyki i porównania.</p></div>
-<div class="card" onclick="show('news')"><div class="icon">📰</div><h3>Aktualności</h3><p>Wiadomości z linkami do źródeł.</p></div>
-<div class="card" onclick="show('weather')"><div class="icon">🌬️</div><h3>Pogoda</h3><p>Wiatr, temperatura i prognoza.</p></div>
-<div class="card" onclick="show('favorites')"><div class="icon">❤️</div><h3>Ulubieni</h3><p>Twoi zawodnicy w jednym miejscu.</p></div>
-</div></div>
-<div class="notice">Wersja startowa: prezentuje układ i nawigację. Nie pokazuje jeszcze wyników na żywo ani potwierdzonego terminarza.</div>
-</section>
-<section id="results" class="view section"><h2>Wyniki</h2><div class="toolbar"><button class="active">Na żywo</button><button>Konkursy</button><button>PŚ</button><button>PN</button></div><div class="card"><h3>Centrum wyników</h3><p>Po integracji z licencjonowanym źródłem pojawią się tu wyniki obu serii, odległości, noty sędziowskie, punkty za wiatr i belkę oraz klasyfikacje.</p><div class="notice">Brak połączenia z oficjalnym źródłem wyników — nie wyświetlamy fikcyjnych rezultatów jako prawdziwych.</div></div></section>
-<section id="calendar" class="view section"><h2>Terminarz</h2><div class="card"><h3>Kalendarz Pucharu Świata</h3><p>Terminy, lokalizacje, skocznie, HS, kwalifikacje, treningi i konkursy. Przypomnienie domyślne: 30 minut przed startem.</p><div class="notice">Terminarz zostanie uzupełniony po sprawdzeniu oficjalnego kalendarza i praw do wykorzystania danych.</div></div></section>
-<section id="athletes" class="view section"><h2>Profile zawodników</h2><input class="search" id="athleteSearch" placeholder="Szukaj zawodnika..." oninput="filterAthletes()"><div id="athleteList"></div><div class="card" id="athleteProfile" style="margin-top:12px"><h3>Wybierz zawodnika z listy</h3><p>Profil pokaże historię konkursów, zwycięstwa, podia, rekord życiowy, pozycję w PŚ i wykres formy.</p></div></section>
-<section id="news" class="view section"><h2>Aktualności</h2><div class="card"><h3>Wiadomości ze świata skoków</h3><p>Docelowo: najnowsze wiadomości, sekcja o Polakach, wywiady, wideo, relacje oraz zapisane artykuły.</p><div class="notice">Publikowane będą nagłówki, krótkie opisy i odnośniki do oryginalnych materiałów, z poszanowaniem praw autorskich.</div></div></section>
-<section id="weather" class="view section">
-  <h2>🌦️ Pogoda na skoczniach</h2>
-  <p class="notice">Aktualne dane pogodowe i prognoza dla okolic skoczni.</p>
-
-  <div class="grid">
-    <div class="card">
-      <h3>🇵🇱 Zakopane</h3>
-      <div id="weather-zakopane">Pobieranie danych...</div>
-    </div>
-
-    <div class="card">
-      <h3>🇵🇱 Wisła</h3>
-      <div id="weather-wisla">Pobieranie danych...</div>
-    </div>
-
-    <div class="card">
-      <h3>🇸🇮 Planica</h3>
-      <div id="weather-planica">Pobieranie danych...</div>
-    </div>
-
-    <div class="card">
-      <h3>🇩🇪 Oberstdorf</h3>
-      <div id="weather-oberstdorf">Pobieranie danych...</div>
-    </div>
-  </div>
-
-  <p id="weather-updated" class="notice">Łączenie ze źródłem pogody...</p>
-  <p class="notice">
-    Źródło danych: <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>.
-    Dane są prognozą modelową, a nie pomiarem na progu skoczni.
-    O bezpieczeństwie zawodów decyduje jury.
-  </p>
-  <button onclick="loadHillWeather()">Odśwież pogodę</button>
-</section>
-<section id="favorites" class="view section"><h2>Ulubieni zawodnicy</h2><p class="muted">Dodawaj skoczków w zakładce Zawodnicy. Lista będzie zapisywana na tym urządzeniu.</p><div id="favoriteList" class="card"></div></section>
-</main>
-<footer>Skoki Narciarskie LIVE • Projekt niezależny • Dane i aktualności wymagają podłączenia zatwierdzonych źródeł.</footer>
+<div class="hero">
+<div class="eyebrow">Sezon skoków • centrum kibica</div>
+<h1>Emocje zaczynają się<br>na rozbiegu.</h1>
+<p>Wyniki, terminarz, profile zawodników i najważniejsze informacje w jednym miejscu.</p>
+<span class="pill">SKOKI NARCIARSKIE LIVE</span>
 </div>
-<nav class="nav"><div class="navinner"><button class="active" data-view="home" onclick="show('home',this)"><span>⌂</span>Główna</button><button data-view="results" onclick="show('results',this)"><span>▤</span>Wyniki</button><button data-view="calendar" onclick="show('calendar',this)"><span>▦</span>Terminarz</button><button data-view="athletes" onclick="show('athletes',this)"><span>♟</span>Zawodnicy</button><button data-view="favorites" onclick="show('favorites',this)"><span>♡</span>Ulubieni</button></div></nav>
+
+<div class="section">
+<div class="sectionhead">
+<h2>Najbliższe zawody</h2>
+<span class="tag">Terminarz</span>
+</div>
+<div class="card">
+<div class="row">
+<div>
+<div class="name">Kolejny konkurs</div>
+<div class="muted">Po podłączeniu oficjalnego terminarza</div>
+</div>
+<span class="flag">🏔️</span>
+</div>
+<p>Terminy i godziny będą publikowane po weryfikacji źródeł danych.</p>
+<div style="margin-top:12px">
+<button class="btn" onclick="show('calendar')">Otwórz terminarz</button>
+</div>
+</div>
+</div>
+
+<div class="section">
+<div class="sectionhead">
+<h2>Odkrywaj</h2>
+<span class="sub">Wybierz moduł</span>
+</div>
+<div class="grid">
+<div class="card clickable" onclick="show('results')">
+<div class="icon">📊</div><h3>Wyniki</h3><p>Serie, punkty, odległości i klasyfikacje.</p>
+</div>
+<div class="card clickable" onclick="show('calendar')">
+<div class="icon">🗓️</div><h3>Terminarz</h3><p>Konkursy, treningi i przypomnienia.</p>
+</div>
+<div class="card clickable" onclick="show('athletes')">
+<div class="icon">🧑‍🚀</div><h3>Zawodnicy</h3><p>Profile, statystyki i porównania.</p>
+</div>
+<div class="card clickable" onclick="show('news')">
+<div class="icon">📰</div><h3>Aktualności</h3><p>Wiadomości z linkami do źródeł.</p>
+</div>
+<div class="card clickable" onclick="show('weather')">
+<div class="icon">🌬️</div><h3>Pogoda</h3><p>Wiatr, temperatura i prognoza.</p>
+</div>
+<div class="card clickable" onclick="show('favorites')">
+<div class="icon">❤️</div><h3>Ulubieni</h3><p>Twoi zawodnicy w jednym miejscu.</p>
+</div>
+</div>
+</div>
+
+<div class="notice">
+Wersja startowa: prezentuje układ i nawigację. Nie pokazuje jeszcze wyników na żywo ani potwierdzonego terminarza.
+</div>
+</section>
+
+<section id="results" class="view section">
+<h2>Wyniki</h2>
+<div class="toolbar">
+<button class="active" type="button">Na żywo</button>
+<button type="button">Konkursy</button>
+<button type="button">PŚ</button>
+<button type="button">PN</button>
+</div>
+<div class="card">
+<h3>Centrum wyników</h3>
+<p>Po integracji z licencjonowanym źródłem pojawią się tu wyniki obu serii, odległości, noty sędziowskie, punkty za wiatr i belkę oraz klasyfikacje.</p>
+<div class="notice">Brak połączenia z oficjalnym źródłem wyników — nie wyświetlamy fikcyjnych rezultatów jako prawdziwych.</div>
+</div>
+</section>
+
+<section id="calendar" class="view section">
+<h2>Terminarz</h2>
+<div class="card">
+<h3>Kalendarz Pucharu Świata</h3>
+<p>Terminy, lokalizacje, skocznie, HS, kwalifikacje, treningi i konkursy. Przypomnienie domyślne: 30 minut przed startem.</p>
+<div class="notice">Terminarz zostanie uzupełniony po sprawdzeniu oficjalnego kalendarza i praw do wykorzystania danych.</div>
+</div>
+</section>
+
+<section id="athletes" class="view section">
+<h2>Profile zawodników</h2>
+<input class="search" id="athleteSearch" placeholder="Szukaj zawodnika..." oninput="filterAthletes()">
+<div id="athleteList"></div>
+<div class="card" id="athleteProfile" style="margin-top:12px">
+<h3>Wybierz zawodnika z listy</h3>
+<p>Profil pokaże historię konkursów, zwycięstwa, podia, rekord życiowy, pozycję w PŚ i wykres formy.</p>
+</div>
+</section>
+
+<section id="news" class="view section">
+<h2>Aktualności</h2>
+<div class="card">
+<h3>Wiadomości ze świata skoków</h3>
+<p>Docelowo: najnowsze wiadomości, sekcja o Polakach, wywiady, wideo, relacje oraz zapisane artykuły.</p>
+<div class="notice">Publikowane będą nagłówki, krótkie opisy i odnośniki do oryginalnych materiałów, z poszanowaniem praw autorskich.</div>
+</div>
+</section>
+
+<section id="weather" class="view section">
+<h2>🌦️ Pogoda na skoczniach</h2>
+<p class="notice">Aktualne dane pogodowe i prognoza dla okolic skoczni.</p>
+
+<div class="grid">
+<div class="card">
+<h3>🇵🇱 Zakopane</h3>
+<div id="weather-zakopane">Pobieranie danych...</div>
+</div>
+<div class="card">
+<h3>🇵🇱 Wisła</h3>
+<div id="weather-wisla">Pobieranie danych...</div>
+</div>
+<div class="card">
+<h3>🇸🇮 Planica</h3>
+<div id="weather-planica">Pobieranie danych...</div>
+</div>
+<div class="card">
+<h3>🇩🇪 Oberstdorf</h3>
+<div id="weather-oberstdorf">Pobieranie danych...</div>
+</div>
+</div>
+
+<p id="weather-updated" class="notice">Łączenie ze źródłem pogody...</p>
+<p class="notice">
+Źródło danych: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a>.
+Dane są prognozą modelową, a nie pomiarem na progu skoczni.
+O bezpieczeństwie zawodów decyduje jury.
+</p>
+<button class="btn" type="button" onclick="loadHillWeather()">Odśwież pogodę</button>
+</section>
+
+<section id="favorites" class="view section">
+<h2>Ulubieni zawodnicy</h2>
+<p class="muted">Dodawaj skoczków w zakładce Zawodnicy. Lista jest zapisywana na tym urządzeniu.</p>
+<div id="favoriteList" class="card"></div>
+</section>
+
+</main>
+
+<footer>
+Skoki Narciarskie LIVE • Projekt niezależny • Dane wymagają podłączenia zatwierdzonych źródeł.
+</footer>
+</div>
+
+<nav class="nav">
+<div class="navinner">
+<button class="active" data-view="home" onclick="show('home')"><span>⌂</span>Główna</button>
+<button data-view="results" onclick="show('results')"><span>▤</span>Wyniki</button>
+<button data-view="calendar" onclick="show('calendar')"><span>▦</span>Terminarz</button>
+<button data-view="athletes" onclick="show('athletes')"><span>♟</span>Zawodnicy</button>
+<button data-view="favorites" onclick="show('favorites')"><span>♡</span>Ulubieni</button>
+</div>
+</nav>
+
 <script>
-const athletes=[
+const athletes = [
 {name:"Kamil Stoch",flag:"🇵🇱",country:"Polska",note:"Profil do uzupełnienia zweryfikowanymi statystykami"},
 {name:"Dawid Kubacki",flag:"🇵🇱",country:"Polska",note:"Profil do uzupełnienia zweryfikowanymi statystykami"},
 {name:"Piotr Żyła",flag:"🇵🇱",country:"Polska",note:"Profil do uzupełnienia zweryfikowanymi statystykami"},
 {name:"Stefan Kraft",flag:"🇦🇹",country:"Austria",note:"Profil do uzupełnienia zweryfikowanymi statystykami"},
 {name:"Ryoyu Kobayashi",flag:"🇯🇵",country:"Japonia",note:"Profil do uzupełnienia zweryfikowanymi statystykami"},
-{name:"Domen Prevc",flag:"🇸🇮",country:"Słowenia",note:"Profil do uzupełnienia zweryfikowanymi statystykami"}];
-let fav=JSON.parse(localStorage.getItem('skokiFav')||'["Kamil Stoch","Dawid Kubacki"]');
-function show(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));if(id==='favorites')renderFav();window.scrollTo({top:0,behavior:'smooth'})}
-function renderAthletes(list=athletes){document.getElementById('athleteList').innerHTML=list.map(a=>`<div class="card row" style="margin-bottom:8px"><div><span class="flag">${a.flag}</span> <b>${a.name}</b><div class="muted">${a.country}</div></div><button class="btn secondary" onclick="profile('${a.name}')">Profil</button></div>`).join('')}
-function filterAthletes(){let q=document.getElementById('athleteSearch').value.toLowerCase();renderAthletes(athletes.filter(a=>(a.name+' '+a.country).toLowerCase().includes(q)))}
-function profile(name){let a=athletes.find(x=>x.name===name);document.getElementById('athleteProfile').innerHTML=`<h3>${a.flag} ${a.name}</h3><p>${a.note}.</p><div class="statgrid" style="margin-top:12px"><div class="stat"><b>—</b><small>Zwycięstwa</small></div><div class="stat"><b>—</b><small>Podia</small></div><div class="stat"><b>—</b><small>Rekord życiowy</small></div><div class="stat"><b>—</b><small>Pozycja w PŚ</small></div></div><div class="notice">Historia konkursów i porównywanie będą zasilane zweryfikowanymi danymi. Nie wpisujemy zgadywanych statystyk.</div><button class="btn" style="margin-top:10px" onclick="toggleFav('${name}')">${fav.includes(name)?'Usuń z ulubionych':'Dodaj do ulubionych'}</button>`}
-function toggleFav(n){fav=fav.includes(n)?fav.filter(x=>x!==n):[...fav,n];localStorage.setItem('skokiFav',JSON.stringify(fav));profile(n);renderFav()}
-function renderFav(){document.getElementById('favoriteList').innerHTML=fav.length?fav.map(n=>`<div class="row"><b>${athletes.find(a=>a.name===n)?.flag||'⛷️'} ${n}</b><button class="btn secondary" onclick="toggleFav('${n}')">Usuń</button></div>`).join(''):'<p>Nie masz jeszcze ulubionych zawodników.</p>'}
-renderAthletes();renderFav();
-if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+{name:"Domen Prevc",flag:"🇸🇮",country:"Słowenia",note:"Profil do uzupełnienia zweryfikowanymi statystykami"}
+];
 
-<script>const hillsWeather = [
-  {id:"zakopane", lat:49.295, lon:19.949},
-  {id:"wisla", lat:49.626, lon:18.865},
-  {id:"planica", lat:46.477, lon:13.723},
-  {id:"oberstdorf", lat:47.405, lon:10.279}
+let fav = [];
+try {
+fav = JSON.parse(localStorage.getItem("skokiFav") || '["Kamil Stoch","Dawid Kubacki"]');
+if (!Array.isArray(fav)) fav = [];
+} catch(error) {
+fav = ["Kamil Stoch","Dawid Kubacki"];
+}
+
+function show(id) {
+document.querySelectorAll(".view").forEach(section => {
+section.classList.toggle("active", section.id === id);
+});
+document.querySelectorAll(".nav button").forEach(button => {
+button.classList.toggle("active", button.dataset.view === id);
+});
+if (id === "favorites") renderFav();
+if (id === "weather") loadHillWeather();
+window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderAthletes(list = athletes) {
+const container = document.getElementById("athleteList");
+container.innerHTML = list.map(a => `
+<div class="card row" style="margin-bottom:8px">
+<div>
+<span class="flag">${a.flag}</span>
+<b>${a.name}</b>
+<div class="muted">${a.country}</div>
+</div>
+<button class="btn secondary" onclick="profile('${a.name}')">Profil</button>
+</div>
+`).join("");
+}
+
+function filterAthletes() {
+const query = document.getElementById("athleteSearch").value.toLowerCase();
+renderAthletes(athletes.filter(a =>
+(a.name + " " + a.country).toLowerCase().includes(query)
+));
+}
+
+function profile(name) {
+const athlete = athletes.find(a => a.name === name);
+if (!athlete) return;
+
+document.getElementById("athleteProfile").innerHTML = `
+<h3>${athlete.flag} ${athlete.name}</h3>
+<p>${athlete.note}.</p>
+<div class="statgrid" style="margin-top:12px">
+<div class="stat"><b>—</b><small>Zwycięstwa</small></div>
+<div class="stat"><b>—</b><small>Podia</small></div>
+<div class="stat"><b>—</b><small>Rekord życiowy</small></div>
+<div class="stat"><b>—</b><small>Pozycja w PŚ</small></div>
+</div>
+<div class="notice">Historia konkursów i porównywanie będą zasilane zweryfikowanymi danymi. Nie wpisujemy zgadywanych statystyk.</div>
+<button class="btn" style="margin-top:10px" onclick="toggleFav('${name}')">
+${fav.includes(name) ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+</button>
+`;
+}
+
+function toggleFav(name) {
+fav = fav.includes(name) ? fav.filter(item => item !== name) : [...fav,name];
+try {
+localStorage.setItem("skokiFav", JSON.stringify(fav));
+} catch(error) {}
+profile(name);
+renderFav();
+}
+
+function renderFav() {
+const container = document.getElementById("favoriteList");
+container.innerHTML = fav.length
+? fav.map(name => {
+const athlete = athletes.find(a => a.name === name);
+return `
+<div class="row">
+<b>${athlete ? athlete.flag : "⛷️"} ${name}</b>
+<button class="btn secondary" onclick="toggleFav('${name}')">Usuń</button>
+</div>
+`;
+}).join("")
+: "<p>Nie masz jeszcze ulubionych zawodników.</p>";
+}
+
+const hillsWeather = [
+{id:"zakopane",lat:49.295,lon:19.949},
+{id:"wisla",lat:49.626,lon:18.865},
+{id:"planica",lat:46.477,lon:13.723},
+{id:"oberstdorf",lat:47.405,lon:10.279}
 ];
 
 async function loadHillWeather() {
-  const updated = document.getElementById("weather-updated");
-  if (updated) updated.textContent = "Pobieranie aktualnych danych...";
+const updated = document.getElementById("weather-updated");
+if (updated) updated.textContent = "Pobieranie aktualnych danych...";
 
-  for (const hill of hillsWeather) {
-    const box = document.getElementById("weather-" + hill.id);
-    if (!box) continue;
+for (const hill of hillsWeather) {
+const box = document.getElementById("weather-" + hill.id);
+if (!box) continue;
 
-    try {
-      const url = `https://api.open-meteo.com/v1/forecast?latitude=${hill.lat}&longitude=${hill.lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=auto`;
+try {
+const url = `https://api.open-meteo.com/v1/forecast?latitude=${hill.lat}&longitude=${hill.lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=auto`;
 
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Błąd pobierania");
-      const data = await response.json();
-      const w = data.current;
+const response = await fetch(url);
+if (!response.ok) throw new Error("Błąd pobierania");
 
-      const weatherNames = {
-        0:"Bezchmurnie", 1:"Przeważnie pogodnie",
-        2:"Częściowe zachmurzenie", 3:"Pochmurno",
-        45:"Mgła", 48:"Mgła osadzająca szadź",
-        51:"Lekka mżawka", 53:"Mżawka", 55:"Silna mżawka",
-        61:"Lekki deszcz", 63:"Deszcz", 65:"Silny deszcz",
-        71:"Lekki śnieg", 73:"Śnieg", 75:"Silny śnieg",
-        80:"Przelotny deszcz", 81:"Przelotny deszcz",
-        82:"Silny przelotny deszcz",
-        85:"Przelotny śnieg", 86:"Silny przelotny śnieg",
-        95:"Burza", 96:"Burza z gradem", 99:"Silna burza z gradem"
-      };
+const data = await response.json();
+const w = data.current;
 
-      const direction = w.wind_direction_10m;
-      const windDir = direction < 22.5 || direction >= 337.5 ? "N" :
-        direction < 67.5 ? "NE" :
-        direction < 112.5 ? "E" :
-        direction < 157.5 ? "SE" :
-        direction < 202.5 ? "S" :
-        direction < 247.5 ? "SW" :
-        direction < 292.5 ? "W" : "NW";
+const weatherNames = {
+0:"Bezchmurnie",
+1:"Przeważnie pogodnie",
+2:"Częściowe zachmurzenie",
+3:"Pochmurno",
+45:"Mgła",
+48:"Mgła osadzająca szadź",
+51:"Lekka mżawka",
+53:"Mżawka",
+55:"Silna mżawka",
+61:"Lekki deszcz",
+63:"Deszcz",
+65:"Silny deszcz",
+71:"Lekki śnieg",
+73:"Śnieg",
+75:"Silny śnieg",
+80:"Przelotny deszcz",
+81:"Przelotny deszcz",
+82:"Silny przelotny deszcz",
+85:"Przelotny śnieg",
+86:"Silny przelotny śnieg",
+95:"Burza",
+96:"Burza z gradem",
+99:"Silna burza z gradem"
+};
 
-      box.innerHTML = `
-        <p><strong>${w.temperature_2m}°C</strong> · ${weatherNames[w.weather_code] || "Warunki zmienne"}</p>
-        <p>💨 Wiatr: ${w.wind_speed_10m} km/h (${windDir})</p>
-        <p>🌬️ Porywy: ${w.wind_gusts_10m} km/h</p>
-        <p>🌧️ Opady: ${w.precipitation} mm</p>
-        <p>💧 Wilgotność: ${w.relative_humidity_2m}%</p>
-      `;
-    } catch (error) {
-      box.textContent = "Nie udało się pobrać pogody. Spróbuj ponownie.";
-    }
-  }
+const direction = w.wind_direction_10m;
+const windDir =
+direction < 22.5 || direction >= 337.5 ? "N" :
+direction < 67.5 ? "NE" :
+direction < 112.5 ? "E" :
+direction < 157.5 ? "SE" :
+direction < 202.5 ? "S" :
+direction < 247.5 ? "SW" :
+direction < 292.5 ? "W" : "NW";
 
-  if (updated) {
-    updated.textContent = "Ostatnie pobranie: " +
-      new Date().toLocaleString("pl-PL");
-  }
+box.innerHTML = `
+<p><strong>${w.temperature_2m}°C</strong> · ${weatherNames[w.weather_code] || "Warunki zmienne"}</p>
+<p>💨 Wiatr: ${w.wind_speed_10m} km/h (${windDir})</p>
+<p>🌬️ Porywy: ${w.wind_gusts_10m} km/h</p>
+<p>🌧️ Opady: ${w.precipitation} mm</p>
+<p>💧 Wilgotność: ${w.relative_humidity_2m}%</p>
+`;
+} catch(error) {
+box.textContent = "Nie udało się pobrać pogody. Spróbuj ponownie.";
+}
+}
+
+if (updated) {
+updated.textContent = "Ostatnie pobranie: " + new Date().toLocaleString("pl-PL");
+}
+}
+
+renderAthletes();
+renderFav();
+
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+navigator.serviceWorker.register("./sw.js").catch(() => {});
 }
 
 loadHillWeather();
 setInterval(loadHillWeather, 15 * 60 * 1000);
 </script>
-</body></html>
+
+</body>
+</html>
