@@ -34,7 +34,40 @@
 <section id="calendar" class="view section"><h2>Terminarz</h2><div class="card"><h3>Kalendarz Pucharu Świata</h3><p>Terminy, lokalizacje, skocznie, HS, kwalifikacje, treningi i konkursy. Przypomnienie domyślne: 30 minut przed startem.</p><div class="notice">Terminarz zostanie uzupełniony po sprawdzeniu oficjalnego kalendarza i praw do wykorzystania danych.</div></div></section>
 <section id="athletes" class="view section"><h2>Profile zawodników</h2><input class="search" id="athleteSearch" placeholder="Szukaj zawodnika..." oninput="filterAthletes()"><div id="athleteList"></div><div class="card" id="athleteProfile" style="margin-top:12px"><h3>Wybierz zawodnika z listy</h3><p>Profil pokaże historię konkursów, zwycięstwa, podia, rekord życiowy, pozycję w PŚ i wykres formy.</p></div></section>
 <section id="news" class="view section"><h2>Aktualności</h2><div class="card"><h3>Wiadomości ze świata skoków</h3><p>Docelowo: najnowsze wiadomości, sekcja o Polakach, wywiady, wideo, relacje oraz zapisane artykuły.</p><div class="notice">Publikowane będą nagłówki, krótkie opisy i odnośniki do oryginalnych materiałów, z poszanowaniem praw autorskich.</div></div></section>
-<section id="weather" class="view section"><h2>Pogoda na skoczniach</h2><div class="grid"><div class="card"><h3>🇵🇱 Zakopane</h3><p>Prognoza oczekuje na źródło danych.</p></div><div class="card"><h3>🇵🇱 Wisła</h3><p>Prognoza oczekuje na źródło danych.</p></div><div class="card"><h3>🇸🇮 Planica</h3><p>Prognoza oczekuje na źródło danych.</p></div><div class="card"><h3>🇩🇪 Oberstdorf</h3><p>Prognoza oczekuje na źródło danych.</p></div></div><div class="notice">Warunki pogodowe są informacyjne. Decyzje o bezpieczeństwie i rozegraniu zawodów podejmuje jury.</div></section>
+<section id="weather" class="view section">
+  <h2>🌦️ Pogoda na skoczniach</h2>
+  <p class="notice">Aktualne dane pogodowe i prognoza dla okolic skoczni.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>🇵🇱 Zakopane</h3>
+      <div id="weather-zakopane">Pobieranie danych...</div>
+    </div>
+
+    <div class="card">
+      <h3>🇵🇱 Wisła</h3>
+      <div id="weather-wisla">Pobieranie danych...</div>
+    </div>
+
+    <div class="card">
+      <h3>🇸🇮 Planica</h3>
+      <div id="weather-planica">Pobieranie danych...</div>
+    </div>
+
+    <div class="card">
+      <h3>🇩🇪 Oberstdorf</h3>
+      <div id="weather-oberstdorf">Pobieranie danych...</div>
+    </div>
+  </div>
+
+  <p id="weather-updated" class="notice">Łączenie ze źródłem pogody...</p>
+  <p class="notice">
+    Źródło danych: <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>.
+    Dane są prognozą modelową, a nie pomiarem na progu skoczni.
+    O bezpieczeństwie zawodów decyduje jury.
+  </p>
+  <button onclick="loadHillWeather()">Odśwież pogodę</button>
+</section>
 <section id="favorites" class="view section"><h2>Ulubieni zawodnicy</h2><p class="muted">Dodawaj skoczków w zakładce Zawodnicy. Lista będzie zapisywana na tym urządzeniu.</p><div id="favoriteList" class="card"></div></section>
 </main>
 <footer>Skoki Narciarskie LIVE • Projekt niezależny • Dane i aktualności wymagają podłączenia zatwierdzonych źródeł.</footer>
@@ -57,5 +90,71 @@ function toggleFav(n){fav=fav.includes(n)?fav.filter(x=>x!==n):[...fav,n];localS
 function renderFav(){document.getElementById('favoriteList').innerHTML=fav.length?fav.map(n=>`<div class="row"><b>${athletes.find(a=>a.name===n)?.flag||'⛷️'} ${n}</b><button class="btn secondary" onclick="toggleFav('${n}')">Usuń</button></div>`).join(''):'<p>Nie masz jeszcze ulubionych zawodników.</p>'}
 renderAthletes();renderFav();
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+<script>const hillsWeather = [
+  {id:"zakopane", lat:49.295, lon:19.949},
+  {id:"wisla", lat:49.626, lon:18.865},
+  {id:"planica", lat:46.477, lon:13.723},
+  {id:"oberstdorf", lat:47.405, lon:10.279}
+];
+
+async function loadHillWeather() {
+  const updated = document.getElementById("weather-updated");
+  if (updated) updated.textContent = "Pobieranie aktualnych danych...";
+
+  for (const hill of hillsWeather) {
+    const box = document.getElementById("weather-" + hill.id);
+    if (!box) continue;
+
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${hill.lat}&longitude=${hill.lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m&timezone=auto`;
+
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Błąd pobierania");
+      const data = await response.json();
+      const w = data.current;
+
+      const weatherNames = {
+        0:"Bezchmurnie", 1:"Przeważnie pogodnie",
+        2:"Częściowe zachmurzenie", 3:"Pochmurno",
+        45:"Mgła", 48:"Mgła osadzająca szadź",
+        51:"Lekka mżawka", 53:"Mżawka", 55:"Silna mżawka",
+        61:"Lekki deszcz", 63:"Deszcz", 65:"Silny deszcz",
+        71:"Lekki śnieg", 73:"Śnieg", 75:"Silny śnieg",
+        80:"Przelotny deszcz", 81:"Przelotny deszcz",
+        82:"Silny przelotny deszcz",
+        85:"Przelotny śnieg", 86:"Silny przelotny śnieg",
+        95:"Burza", 96:"Burza z gradem", 99:"Silna burza z gradem"
+      };
+
+      const direction = w.wind_direction_10m;
+      const windDir = direction < 22.5 || direction >= 337.5 ? "N" :
+        direction < 67.5 ? "NE" :
+        direction < 112.5 ? "E" :
+        direction < 157.5 ? "SE" :
+        direction < 202.5 ? "S" :
+        direction < 247.5 ? "SW" :
+        direction < 292.5 ? "W" : "NW";
+
+      box.innerHTML = `
+        <p><strong>${w.temperature_2m}°C</strong> · ${weatherNames[w.weather_code] || "Warunki zmienne"}</p>
+        <p>💨 Wiatr: ${w.wind_speed_10m} km/h (${windDir})</p>
+        <p>🌬️ Porywy: ${w.wind_gusts_10m} km/h</p>
+        <p>🌧️ Opady: ${w.precipitation} mm</p>
+        <p>💧 Wilgotność: ${w.relative_humidity_2m}%</p>
+      `;
+    } catch (error) {
+      box.textContent = "Nie udało się pobrać pogody. Spróbuj ponownie.";
+    }
+  }
+
+  if (updated) {
+    updated.textContent = "Ostatnie pobranie: " +
+      new Date().toLocaleString("pl-PL");
+  }
+}
+
+loadHillWeather();
+setInterval(loadHillWeather, 15 * 60 * 1000);
 </script>
 </body></html>
