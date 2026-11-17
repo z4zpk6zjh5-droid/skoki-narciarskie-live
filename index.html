@@ -130,9 +130,18 @@ a{color:#ff7883}
 </section>
 
 <section id="athletes" class="view section">
-<h2>🧑‍🚀 Zawodnicy</h2>
-<input class="search" id="athleteSearch" placeholder="Szukaj zawodnika..." oninput="renderAthletes()">
+<h2>🧑‍🚀 Zawodnicy 2026/2027</h2>
+<p class="muted">Dwie oddzielne listy zawodniczek i zawodników. Wyszukuj po nazwisku lub kraju, filtruj reprezentacje i dodawaj ulubionych.</p>
+<div class="formgrid">
+<button id="womenTab" onclick="setAthleteGender('Kobiety')">👩 Kobiety</button>
+<button id="menTab" class="secondary" onclick="setAthleteGender('Mężczyźni')">👨 Mężczyźni</button>
+</div>
+<input class="search" id="athleteSearch" placeholder="Szukaj zawodnika lub kraju..." oninput="renderAthletes()">
+<label>Filtr kraju</label><select class="field" id="athleteCountry" onchange="renderAthletes()"><option value="">Wszystkie kraje</option></select>
+<div id="athleteCount" class="muted"></div>
 <div id="athleteList"></div>
+<div class="notice">Baza obejmuje zawodników znanych z międzynarodowych zawodów i zapowiedzi sezonu 2026/2027. Nie jest oficjalną listą zgłoszeń na każdy konkurs. Nie pokazujemy niepotwierdzonych punktów ani rankingów.</div>
+<a class="btn secondary" href="https://www.fis-ski.com/DB/ski-jumping/athlete-biography.html" target="_blank" rel="noopener">Profile zawodników FIS ↗</a>
 </section>
 
 <section id="favorites" class="view section">
@@ -184,11 +193,107 @@ if(!Array.isArray(savedResults))savedResults=[];
 if(!Array.isArray(fav))fav=[];
 if(!Array.isArray(notified))notified=[];
 
-const athletes=[
-["Kamil Stoch","🇵🇱","Polska"],["Dawid Kubacki","🇵🇱","Polska"],
-["Piotr Żyła","🇵🇱","Polska"],["Stefan Kraft","🇦🇹","Austria"],
-["Ryoyu Kobayashi","🇯🇵","Japonia"],["Domen Prevc","🇸🇮","Słowenia"]
+const athleteSeed = [
+/* KOBIETY */
+["Nika Prevc","🇸🇮","Słowenia","Kobiety"],
+["Anna Odine Stroem","🇳🇴","Norwegia","Kobiety"],
+["Nozomi Maruyama","🇯🇵","Japonia","Kobiety"],
+["Eirin Maria Kvandal","🇳🇴","Norwegia","Kobiety"],
+["Frida Westman","🇸🇪","Szwecja","Kobiety"],
+["Selina Freitag","🇩🇪","Niemcy","Kobiety"],
+["Abigail Strate","🇨🇦","Kanada","Kobiety"],
+["Eva Pinkelnig","🇦🇹","Austria","Kobiety"],
+["Alexandria Loutitt","🇨🇦","Kanada","Kobiety"],
+["Sara Takanashi","🇯🇵","Japonia","Kobiety"],
+["Yuki Ito","🇯🇵","Japonia","Kobiety"],
+["Yuzuki Sato","🇯🇵","Japonia","Kobiety"],
+["Ringo Miyajima","🇯🇵","Japonia","Kobiety"],
+["Anna Twardosz","🇵🇱","Polska","Kobiety"],
+["Nicole Konderla-Juroszek","🇵🇱","Polska","Kobiety"],
+["Pola Bełtowska","🇵🇱","Polska","Kobiety"],
+["Kira Maria Kapustikova","🇸🇰","Słowacja","Kobiety"],
+["Josephine Pagnier","🇫🇷","Francja","Kobiety"],
+["Agnes Reisch","🇩🇪","Niemcy","Kobiety"],
+["Juliane Seyfarth","🇩🇪","Niemcy","Kobiety"],
+["Luisa Goerlich","🇩🇪","Niemcy","Kobiety"],
+["Lisa Eder","🇦🇹","Austria","Kobiety"],
+["Julia Mühlbacher","🇦🇹","Austria","Kobiety"],
+["Hannah Wiegele","🇦🇹","Austria","Kobiety"],
+["Chiara Kreuzer","🇦🇹","Austria","Kobiety"],
+["Silje Opseth","🇳🇴","Norwegia","Kobiety"],
+["Heidi Dyhre Traaserud","🇳🇴","Norwegia","Kobiety"],
+["Ingvild Synnoeve Midtskogen","🇳🇴","Norwegia","Kobiety"],
+["Jenny Rautionaho","🇫🇮","Finlandia","Kobiety"],
+["Sofia Mattila","🇫🇮","Finlandia","Kobiety"],
+["Oosa Thure","🇫🇮","Finlandia","Kobiety"],
+["Klara Ulrichova","🇨🇿","Czechy","Kobiety"],
+["Emely Torazza","🇩🇪","Niemcy","Kobiety"],
+["Nika Vodan","🇸🇮","Słowenia","Kobiety"],
+["Taja Bodlaj","🇸🇮","Słowenia","Kobiety"],
+["Katra Komar","🇸🇮","Słowenia","Kobiety"],
+["Lucija Jurgec","🇸🇮","Słowenia","Kobiety"],
+["Ping Zeng","🇨🇳","Chiny","Kobiety"],
+["Bing Dong","🇨🇳","Chiny","Kobiety"],
+["Qi Liu","🇨🇳","Chiny","Kobiety"],
+["Nicole Maurer","🇨🇦","Kanada","Kobiety"],
+["Josie Johnson","🇺🇸","USA","Kobiety"],
+["Paige Jones","🇺🇸","USA","Kobiety"],
+["Annika Belshaw","🇺🇸","USA","Kobiety"],
+["Karolina Indrackova","🇨🇿","Czechy","Kobiety"],
+
+/* MĘŻCZYŹNI */
+["Domen Prevc","🇸🇮","Słowenia","Mężczyźni"],
+["Ryoyu Kobayashi","🇯🇵","Japonia","Mężczyźni"],
+["Philipp Raimund","🇩🇪","Niemcy","Mężczyźni"],
+["Daniel Tschofenig","🇦🇹","Austria","Mężczyźni"],
+["Ren Nikaido","🇯🇵","Japonia","Mężczyźni"],
+["Stephan Embacher","🇦🇹","Austria","Mężczyźni"],
+["Anze Lanisek","🇸🇮","Słowenia","Mężczyźni"],
+["Jan Hoerl","🇦🇹","Austria","Mężczyźni"],
+["Naoki Nakamura","🇯🇵","Japonia","Mężczyźni"],
+["Marius Lindvik","🇳🇴","Norwegia","Mężczyźni"],
+["Stefan Kraft","🇦🇹","Austria","Mężczyźni"],
+["Felix Hoffmann","🇩🇪","Niemcy","Mężczyźni"],
+["Johann Andre Forfang","🇳🇴","Norwegia","Mężczyźni"],
+["Manuel Fettner","🇦🇹","Austria","Mężczyźni"],
+["Gregor Deschwanden","🇨🇭","Szwajcaria","Mężczyźni"],
+["Maximilian Ortner","🇦🇹","Austria","Mężczyźni"],
+["Vladimir Zografski","🇧🇬","Bułgaria","Mężczyźni"],
+["Valentin Foubert","🇫🇷","Francja","Mężczyźni"],
+["Kamil Stoch","🇵🇱","Polska","Mężczyźni"],
+["Kristoffer Eriksen Sundal","🇳🇴","Norwegia","Mężczyźni"],
+["Jonas Schuster","🇦🇹","Austria","Mężczyźni"],
+["Sakutaro Kobayashi","🇯🇵","Japonia","Mężczyźni"],
+["Antti Aalto","🇫🇮","Finlandia","Mężczyźni"],
+["Kacper Tomasiak","🇵🇱","Polska","Mężczyźni"],
+["Tomofumi Naito","🇯🇵","Japonia","Mężczyźni"],
+["Niklas Bachlinger","🇦🇹","Austria","Mężczyźni"],
+["Andreas Wellinger","🇩🇪","Niemcy","Mężczyźni"],
+["Piotr Żyła","🇵🇱","Polska","Mężczyźni"],
+["Dawid Kubacki","🇵🇱","Polska","Mężczyźni"],
+["Niko Kytosaho","🇫🇮","Finlandia","Mężczyźni"],
+["Timi Zajc","🇸🇮","Słowenia","Mężczyźni"],
+["Halvor Egner Granerud","🇳🇴","Norwegia","Mężczyźni"],
+["Yukiya Sato","🇯🇵","Japonia","Mężczyźni"],
+["Pius Paschke","🇩🇪","Niemcy","Mężczyźni"],
+["Maciej Kot","🇵🇱","Polska","Mężczyźni"],
+["Karl Geiger","🇩🇪","Niemcy","Mężczyźni"],
+["Isak Andreas Langmo","🇳🇴","Norwegia","Mężczyźni"],
+["Jason Colby","🇺🇸","USA","Mężczyźni"],
+["Sandro Hauswirth","🇨🇭","Szwajcaria","Mężczyźni"],
+["Lovro Kos","🇸🇮","Słowenia","Mężczyźni"],
+["Artti Aigro","🇪🇪","Estonia","Mężczyźni"],
+["Kevin Bickner","🇺🇸","USA","Mężczyźni"],
+["Simon Ammann","🇨🇭","Szwajcaria","Mężczyźni"],
+["Aleksander Zniszczoł","🇵🇱","Polska","Mężczyźni"],
+["Paweł Wąsek","🇵🇱","Polska","Mężczyźni"],
+["Roman Koudelka","🇨🇿","Czechy","Mężczyźni"],
+["Giovanni Bresadola","🇮🇹","Włochy","Mężczyźni"],
+["Yevhen Marusiak","🇺🇦","Ukraina","Mężczyźni"],
+["Fatih Arda İpcioğlu","🇹🇷","Turcja","Mężczyźni"],
+["Sergey Tkachenko","🇰🇿","Kazachstan","Mężczyźni"]
 ];
+const athletes=athleteSeed.map(([name,flag,country,gender])=>({name,flag,country,gender}));
 
 /* Terminarz Snow-Online 2026/2027.
    Puste godziny oznaczają, że źródło nie podało jeszcze godziny startu. */
@@ -202,7 +307,6 @@ const snowSchedule=[
 ["2026-11-22","Lillehammer","Konkurs indywidualny","Kobiety","12:00"],
 ["2026-11-22","Lillehammer","Kwalifikacje","Mężczyźni","14:30"],
 ["2026-11-22","Lillehammer","Konkurs indywidualny","Mężczyźni","16:00"],
-
 ["2026-11-27","Ruka / Kuusamo","Kwalifikacje","Mężczyźni","17:15"],
 ["2026-11-28","Ruka / Kuusamo","Konkurs indywidualny","Mężczyźni","16:30"],
 ["2026-11-29","Ruka / Kuusamo","Kwalifikacje","Mężczyźni","12:45"],
@@ -211,7 +315,6 @@ const snowSchedule=[
 ["2026-11-28","Hinzenbach","Konkurs indywidualny","Kobiety","13:30"],
 ["2026-11-29","Hinzenbach","Kwalifikacje","Kobiety","08:45"],
 ["2026-11-29","Hinzenbach","Konkurs indywidualny","Kobiety","10:15"],
-
 ["2026-12-04","Wisła","Kwalifikacje","Kobiety","14:15"],
 ["2026-12-04","Wisła","Kwalifikacje","Mężczyźni","18:00"],
 ["2026-12-05","Wisła","Konkurs indywidualny","Kobiety","11:15"],
@@ -219,7 +322,6 @@ const snowSchedule=[
 ["2026-12-06","Wisła","Kwalifikacje / konkurs","Kobiety","12:45"],
 ["2026-12-06","Wisła","Kwalifikacje","Mężczyźni","14:00"],
 ["2026-12-06","Wisła","Konkurs indywidualny","Mężczyźni","15:40"],
-
 ["2026-12-11","Titisee-Neustadt","Kwalifikacje","Kobiety","11:45"],
 ["2026-12-11","Titisee-Neustadt","Konkurs drużynowy","Mężczyźni","16:10"],
 ["2026-12-12","Titisee-Neustadt","Konkurs indywidualny","Kobiety","13:00"],
@@ -227,14 +329,12 @@ const snowSchedule=[
 ["2026-12-12","Titisee-Neustadt","Konkurs indywidualny","Mężczyźni","15:40"],
 ["2026-12-13","Titisee-Neustadt","Konkurs indywidualny","Kobiety","13:00"],
 ["2026-12-13","Titisee-Neustadt","Konkurs indywidualny","Mężczyźni","15:30"],
-
 ["2026-12-18","Engelberg","Kwalifikacje","Kobiety","12:15"],
 ["2026-12-18","Engelberg","Kwalifikacje","Mężczyźni","17:00"],
 ["2026-12-19","Engelberg","Konkurs indywidualny","Kobiety","13:15"],
 ["2026-12-19","Engelberg","Konkurs indywidualny","Mężczyźni","16:00"],
 ["2026-12-20","Engelberg","Kwalifikacje / konkurs","Kobiety","12:00"],
 ["2026-12-20","Engelberg","Konkurs indywidualny","Mężczyźni","16:00"],
-
 ["2026-12-28","Oberstdorf","Kwalifikacje","Kobiety","13:30"],
 ["2026-12-28","Oberstdorf","Kwalifikacje","Mężczyźni","17:45"],
 ["2026-12-29","Oberstdorf","Konkurs indywidualny","Kobiety","15:15"],
@@ -248,7 +348,6 @@ const snowSchedule=[
 ["2027-01-05","Bischofshofen","Kwalifikacje","Kobiety","12:15"],
 ["2027-01-05","Bischofshofen","Kwalifikacje","Mężczyźni","16:40"],
 ["2027-01-06","Bischofshofen","Konkurs indywidualny","Mężczyźni","16:30"],
-
 ["2027-01-09","Ljubno","Kwalifikacje","Kobiety","13:00"],
 ["2027-01-09","Ljubno","Konkurs indywidualny","Kobiety","14:30"],
 ["2027-01-10","Ljubno","Kwalifikacje","Kobiety","13:00"],
@@ -263,7 +362,6 @@ const snowSchedule=[
 ["2027-01-15","Zakopane","Kwalifikacje","Mężczyźni",""],
 ["2027-01-16","Zakopane","Konkurs drużynowy","Mężczyźni",""],
 ["2027-01-17","Zakopane","Konkurs indywidualny","Mężczyźni",""],
-
 ["2027-01-22","Sapporo","Kwalifikacje","Kobiety","02:30"],
 ["2027-01-22","Sapporo","Kwalifikacje","Mężczyźni","06:45"],
 ["2027-01-23","Sapporo","Mikst","Kobiety","05:30"],
@@ -278,7 +376,6 @@ const snowSchedule=[
 ["2027-01-30","Willingen","Konkurs indywidualny","Mężczyźni","16:10"],
 ["2027-01-31","Willingen","Konkurs indywidualny","Kobiety","13:15"],
 ["2027-01-31","Willingen","Konkurs indywidualny","Mężczyźni","16:05"],
-
 ["2027-02-05","Lake Placid","Konkurs indywidualny","Kobiety",""],
 ["2027-02-06","Lake Placid","Konkurs indywidualny","Mężczyźni",""],
 ["2027-02-07","Lake Placid","Mikst","Kobiety",""],
@@ -295,7 +392,6 @@ const snowSchedule=[
 ["2027-02-21","Vikersund","Konkurs indywidualny","Mężczyźni","14:50"],
 ["2027-02-20","Villach","Konkurs indywidualny","Kobiety",""],
 ["2027-02-21","Villach","Konkurs indywidualny","Kobiety",""],
-
 ["2027-02-25","Falun","Konkurs drużynowy","Kobiety",""],
 ["2027-02-26","Falun","Konkurs indywidualny","Kobiety",""],
 ["2027-02-27","Falun","Mikst","Kobiety",""],
@@ -318,15 +414,13 @@ const snowSchedule=[
 
 function seedSchedule(){
 if(read("skokiSnowSeed2027",false))return;
-const existing=events;
 snowSchedule.forEach((r,i)=>{
 const [date,place,kind,type,time]=r;
-const name="Puchar Świata – "+kind;
-const exists=existing.some(e=>e.date===date&&e.place===place&&e.type===type&&e.kind===kind&&e.source==="Snow-Online");
+const exists=events.some(e=>e.date===date&&e.place===place&&e.type===type&&e.kind===kind&&e.source==="Snow-Online");
 if(exists)return;
 events.push({
-id:"snow-2027-"+i,name,date,time,place,category:"Puchar Świata",
-season:"Zima",type,kind,reminder:30,source:"Snow-Online"
+id:"snow-2027-"+i,name:"Puchar Świata – "+kind,date,time,place,
+category:"Puchar Świata",season:"Zima",type,kind,reminder:30,source:"Snow-Online"
 });
 });
 events.sort((a,b)=>(a.date+(a.time||"99:99")).localeCompare(b.date+(b.time||"99:99")));
@@ -342,6 +436,7 @@ if(id==="home")renderHome();
 if(id==="results")renderResults();
 if(id==="favorites")renderFav();
 if(id==="weather")loadWeather();
+if(id==="athletes")renderAthletes();
 scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -414,9 +509,28 @@ function renderResults(){
 $("savedResults").innerHTML=savedResults.map(r=>`<div class="row"><span><b>${esc(r.event)}</b><div class="muted">${esc(r.winner)} • ${esc(r.score)}</div></span><button class="secondary" onclick="deleteResult('${esc(r.id)}')">Usuń</button></div>`).join("")||'<p class="muted">Brak zapisanych wyników.</p>';
 }
 
+let athleteGender="Kobiety";
+function setAthleteGender(gender){
+athleteGender=gender;
+$("womenTab").className=gender==="Kobiety"?"":"secondary";
+$("menTab").className=gender==="Mężczyźni"?"":"secondary";
+$("athleteSearch").value="";
+$("athleteCountry").value="";
+renderAthletes();
+}
 function renderAthletes(){
 const q=$("athleteSearch").value.toLowerCase();
-$("athleteList").innerHTML=athletes.filter(a=>a.join(" ").toLowerCase().includes(q)).map(a=>`<div class="card row"><span>${a[1]} <b>${a[0]}</b><div class="muted">${a[2]}</div></span><button class="secondary" onclick="toggleFav('${a[0]}')">${fav.includes(a[0])?"Usuń z ulubionych":"Dodaj do ulubionych"}</button></div>`).join("");
+const selectedCountry=$("athleteCountry").value;
+const countries=[...new Set(athletes.filter(a=>a.gender===athleteGender).map(a=>a.country))].sort((a,b)=>a.localeCompare(b,"pl"));
+const select=$("athleteCountry");
+select.innerHTML='<option value="">Wszystkie kraje</option>'+countries.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
+select.value=countries.includes(selectedCountry)?selectedCountry:"";
+const list=athletes.filter(a=>a.gender===athleteGender&&(!select.value||a.country===select.value)&&(!q||(a.name+" "+a.country).toLowerCase().includes(q)));
+$("athleteCount").textContent=(athleteGender==="Kobiety"?"Zawodniczki: ":"Zawodnicy: ")+list.length;
+$("athleteList").innerHTML=list.map(a=>`<div class="card">
+<div class="row"><span><span style="font-size:25px">${a.flag}</span> <b>${esc(a.name)}</b><div class="muted">${esc(a.country)} • ${a.gender}</div></span><button class="secondary" onclick="toggleFav('${esc(a.name)}')">${fav.includes(a.name)?"♥ W ulubionych":"♡ Dodaj"}</button></div>
+<div class="muted">Profil zawodnika • sezon 2026/2027</div>
+</div>`).join("")||'<div class="card">Nie znaleziono zawodników dla wybranych filtrów.</div>';
 }
 function toggleFav(name){
 fav=fav.includes(name)?fav.filter(x=>x!==name):[...fav,name];
@@ -486,7 +600,7 @@ notified.push(key);store("skokiNotified",notified);
 }
 
 seedSchedule();
-renderEvents();renderHome();renderResults();renderAthletes();renderFav();
+renderEvents();renderHome();renderResults();setAthleteGender("Kobiety");renderFav();
 loadWeather();
 setInterval(loadWeather,15*60*1000);
 setInterval(checkReminders,30000);
