@@ -60,7 +60,7 @@ a{color:#ff7883}
 <div class="section"><h2>Najbliższe zawody</h2><div class="card" id="homeNextEvents"></div></div>
 <div class="section"><h2>Odkrywaj</h2><div class="grid">
 <div class="card" onclick="show('results')">📊 <b>Wyniki</b><p class="muted">Wyniki LIVE i własne zapiski</p></div>
-<div class="card" onclick="show('calendar')">🗓️ <b>Terminarz</b><p class="muted">Konkursy letnie i zimowe</p></div>
+<div class="card" onclick="show('calendar')">🗓️ <b>Terminarz</b><p class="muted">Konkursy kobiet i mężczyzn</p></div>
 <div class="card" onclick="show('athletes')">🧑‍🚀 <b>Zawodnicy</b><p class="muted">Profile i ulubieni</p></div>
 <div class="card" onclick="show('news')">📰 <b>Aktualności</b><p class="muted">Wiadomości ze skoków</p></div>
 <div class="card" onclick="show('weather')">🌬️ <b>Pogoda</b><p class="muted">Warunki na skoczniach</p></div>
@@ -81,14 +81,13 @@ a{color:#ff7883}
 </section>
 
 <section id="calendar" class="view section">
-<h2>🗓️ Mój terminarz skoków</h2>
+<h2>🗓️ Terminarz skoków 2026/2027</h2>
 <div class="card">
-<h3>Import terminarza FIS</h3>
-<p class="muted">Na stronie FIS wybierz sezon, kategorie zawodów i opcję „Selected calendar (ICS)”. Pobierz plik kalendarza, a następnie wybierz go poniżej. Import zachowa wpisane wcześniej godziny i przypomnienia przy rozpoznanych konkursach.</p>
-<a class="btn" href="https://www.fis-ski.com/DB/ski-jumping/calendar-results.html?noselection=true" target="_blank">Otwórz kalendarz FIS ↗</a>
-<label>Wybierz pobrany plik .ics</label>
-<input class="field" type="file" accept=".ics,text/calendar" onchange="importICS(this.files[0])">
-<div id="importStatus" class="muted">Nie wybrano jeszcze pliku.</div>
+<h3>Terminarz Snow-Online</h3>
+<p class="muted">Terminarz Pucharu Świata kobiet i mężczyzn na sezon 2026/2027. Wpisy zostały przygotowane na podstawie tabel Snow-Online.</p>
+<a class="btn" href="https://www.snow-online.com/skimag/fis-ski-jumping-world-cup-schedule-dates-and-venues.htm" target="_blank">Otwórz kalendarz Snow-Online ↗</a>
+<p class="muted">Godziny, których źródło nie podaje, pozostają nieuzupełnione. Terminarz może ulec zmianie.</p>
+<div class="notice">Wpisy terminarza są dodawane automatycznie przy pierwszym uruchomieniu tej wersji strony. Twoje własne zawody i zapisane wyniki pozostają w pamięci przeglądarki.</div>
 </div>
 
 <div class="card">
@@ -121,7 +120,7 @@ a{color:#ff7883}
 <div><label>Sezon</label><select class="field" id="filterSeason" onchange="renderEvents()"><option value="">Lato i zima</option><option>Lato</option><option>Zima</option></select></div>
 </div>
 <div class="formgrid">
-<div><label>Kategoria</label><select class="field" id="filterType" onchange="renderEvents()"><option value="">Wszyscy</option><option>Mężczyźni</option><option>Kobiety</option><option>Drużynowy</option><option>Mikst</option></select></div>
+<div><label>Kategoria</label><select class="field" id="filterType" onchange="renderEvents()"><option value="">Wszyscy</option><option>Mężczyźni</option><option>Kobiety</option><option>Drużynowy</option><option>Mikst</option><option>Inny</option></select></div>
 <div><label>Miejscowość</label><input class="field" id="filterPlace" oninput="renderEvents()" placeholder="Szukaj miejscowości"></div>
 </div>
 </div>
@@ -142,6 +141,7 @@ a{color:#ff7883}
 
 <section id="news" class="view section">
 <h2>📰 Aktualności</h2>
+<div class="card"><h3>Snow-Online</h3><a class="btn" href="https://www.snow-online.com/skimag/" target="_blank">Aktualności Snow-Online ↗</a></div>
 <div class="card"><h3>FIS – skoki narciarskie</h3><a class="btn" href="https://www.fis-ski.com/ski-jumping" target="_blank">Aktualności FIS ↗</a></div>
 <div class="card"><h3>Skijumping.pl</h3><a class="btn secondary" href="https://www.skijumping.pl/" target="_blank">Otwórz Skijumping.pl ↗</a></div>
 </section>
@@ -161,7 +161,7 @@ a{color:#ff7883}
 </section>
 </main>
 
-<footer>Skoki Narciarskie LIVE • Niezależny projekt • Pogoda: Open-Meteo • Wyniki: FIS</footer>
+<footer>Skoki Narciarskie LIVE • Niezależny projekt • Terminarz: Snow-Online • Pogoda: Open-Meteo • Wyniki: FIS</footer>
 </div>
 
 <nav class="nav"><div class="navinner">
@@ -174,6 +174,7 @@ a{color:#ff7883}
 </div></nav>
 
 <script>
+const $=id=>document.getElementById(id);
 const read=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}};
 const store=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -184,13 +185,154 @@ if(!Array.isArray(fav))fav=[];
 if(!Array.isArray(notified))notified=[];
 
 const athletes=[
-["Kamil Stoch","🇵🇱","Polska"],
-["Dawid Kubacki","🇵🇱","Polska"],
-["Piotr Żyła","🇵🇱","Polska"],
-["Stefan Kraft","🇦🇹","Austria"],
-["Ryoyu Kobayashi","🇯🇵","Japonia"],
-["Domen Prevc","🇸🇮","Słowenia"]
+["Kamil Stoch","🇵🇱","Polska"],["Dawid Kubacki","🇵🇱","Polska"],
+["Piotr Żyła","🇵🇱","Polska"],["Stefan Kraft","🇦🇹","Austria"],
+["Ryoyu Kobayashi","🇯🇵","Japonia"],["Domen Prevc","🇸🇮","Słowenia"]
 ];
+
+/* Terminarz Snow-Online 2026/2027.
+   Puste godziny oznaczają, że źródło nie podało jeszcze godziny startu. */
+const snowSchedule=[
+["2026-11-20","Lillehammer","Kwalifikacje","Kobiety","10:30"],
+["2026-11-20","Lillehammer","Kwalifikacje","Mężczyźni","14:00"],
+["2026-11-20","Lillehammer","Mikst","Mikst","16:00"],
+["2026-11-21","Lillehammer","Konkurs indywidualny","Kobiety","14:35"],
+["2026-11-21","Lillehammer","Konkurs indywidualny","Mężczyźni","16:50"],
+["2026-11-22","Lillehammer","Kwalifikacje","Kobiety","10:30"],
+["2026-11-22","Lillehammer","Konkurs indywidualny","Kobiety","12:00"],
+["2026-11-22","Lillehammer","Kwalifikacje","Mężczyźni","14:30"],
+["2026-11-22","Lillehammer","Konkurs indywidualny","Mężczyźni","16:00"],
+
+["2026-11-27","Ruka / Kuusamo","Kwalifikacje","Mężczyźni","17:15"],
+["2026-11-28","Ruka / Kuusamo","Konkurs indywidualny","Mężczyźni","16:30"],
+["2026-11-29","Ruka / Kuusamo","Kwalifikacje","Mężczyźni","12:45"],
+["2026-11-29","Ruka / Kuusamo","Konkurs indywidualny","Mężczyźni","14:20"],
+["2026-11-28","Hinzenbach","Kwalifikacje","Kobiety","12:00"],
+["2026-11-28","Hinzenbach","Konkurs indywidualny","Kobiety","13:30"],
+["2026-11-29","Hinzenbach","Kwalifikacje","Kobiety","08:45"],
+["2026-11-29","Hinzenbach","Konkurs indywidualny","Kobiety","10:15"],
+
+["2026-12-04","Wisła","Kwalifikacje","Kobiety","14:15"],
+["2026-12-04","Wisła","Kwalifikacje","Mężczyźni","18:00"],
+["2026-12-05","Wisła","Konkurs indywidualny","Kobiety","11:15"],
+["2026-12-05","Wisła","Konkurs indywidualny","Mężczyźni","16:00"],
+["2026-12-06","Wisła","Kwalifikacje / konkurs","Kobiety","12:45"],
+["2026-12-06","Wisła","Kwalifikacje","Mężczyźni","14:00"],
+["2026-12-06","Wisła","Konkurs indywidualny","Mężczyźni","15:40"],
+
+["2026-12-11","Titisee-Neustadt","Kwalifikacje","Kobiety","11:45"],
+["2026-12-11","Titisee-Neustadt","Konkurs drużynowy","Mężczyźni","16:10"],
+["2026-12-12","Titisee-Neustadt","Konkurs indywidualny","Kobiety","13:00"],
+["2026-12-12","Titisee-Neustadt","Kwalifikacje","Mężczyźni","10:00"],
+["2026-12-12","Titisee-Neustadt","Konkurs indywidualny","Mężczyźni","15:40"],
+["2026-12-13","Titisee-Neustadt","Konkurs indywidualny","Kobiety","13:00"],
+["2026-12-13","Titisee-Neustadt","Konkurs indywidualny","Mężczyźni","15:30"],
+
+["2026-12-18","Engelberg","Kwalifikacje","Kobiety","12:15"],
+["2026-12-18","Engelberg","Kwalifikacje","Mężczyźni","17:00"],
+["2026-12-19","Engelberg","Konkurs indywidualny","Kobiety","13:15"],
+["2026-12-19","Engelberg","Konkurs indywidualny","Mężczyźni","16:00"],
+["2026-12-20","Engelberg","Kwalifikacje / konkurs","Kobiety","12:00"],
+["2026-12-20","Engelberg","Konkurs indywidualny","Mężczyźni","16:00"],
+
+["2026-12-28","Oberstdorf","Kwalifikacje","Kobiety","13:30"],
+["2026-12-28","Oberstdorf","Kwalifikacje","Mężczyźni","17:45"],
+["2026-12-29","Oberstdorf","Konkurs indywidualny","Kobiety","15:15"],
+["2026-12-29","Oberstdorf","Konkurs indywidualny","Mężczyźni","16:30"],
+["2026-12-31","Garmisch-Partenkirchen","Kwalifikacje","Kobiety","12:15"],
+["2026-12-31","Garmisch-Partenkirchen","Kwalifikacje","Mężczyźni","16:30"],
+["2027-01-01","Garmisch-Partenkirchen","Konkurs indywidualny","Mężczyźni","16:30"],
+["2027-01-02","Innsbruck","Kwalifikacje","Kobiety","13:30"],
+["2027-01-02","Innsbruck","Kwalifikacje","Mężczyźni","17:45"],
+["2027-01-03","Innsbruck","Konkurs indywidualny","Mężczyźni","16:30"],
+["2027-01-05","Bischofshofen","Kwalifikacje","Kobiety","12:15"],
+["2027-01-05","Bischofshofen","Kwalifikacje","Mężczyźni","16:40"],
+["2027-01-06","Bischofshofen","Konkurs indywidualny","Mężczyźni","16:30"],
+
+["2027-01-09","Ljubno","Kwalifikacje","Kobiety","13:00"],
+["2027-01-09","Ljubno","Konkurs indywidualny","Kobiety","14:30"],
+["2027-01-10","Ljubno","Kwalifikacje","Kobiety","13:00"],
+["2027-01-10","Ljubno","Konkurs indywidualny","Kobiety","14:30"],
+["2027-01-14","Zhangjiakou","Kwalifikacje","Kobiety","11:00"],
+["2027-01-15","Zhangjiakou","Konkurs indywidualny","Kobiety","08:30"],
+["2027-01-16","Zhangjiakou","Kwalifikacje / konkurs","Kobiety","07:00"],
+["2027-01-19","Zao","Kwalifikacje","Kobiety","07:00"],
+["2027-01-19","Zao","Konkurs indywidualny","Kobiety","08:15"],
+["2027-01-20","Zao","Kwalifikacje","Kobiety","06:45"],
+["2027-01-20","Zao","Konkurs indywidualny","Kobiety","08:15"],
+["2027-01-15","Zakopane","Kwalifikacje","Mężczyźni",""],
+["2027-01-16","Zakopane","Konkurs drużynowy","Mężczyźni",""],
+["2027-01-17","Zakopane","Konkurs indywidualny","Mężczyźni",""],
+
+["2027-01-22","Sapporo","Kwalifikacje","Kobiety","02:30"],
+["2027-01-22","Sapporo","Kwalifikacje","Mężczyźni","06:45"],
+["2027-01-23","Sapporo","Mikst","Kobiety","05:30"],
+["2027-01-23","Sapporo","Mikst","Mężczyźni","05:30"],
+["2027-01-23","Sapporo","Konkurs indywidualny","Mężczyźni","08:15"],
+["2027-01-24","Sapporo","Konkurs indywidualny","Mężczyźni","03:00"],
+["2027-01-29","Willingen","Mikst","Kobiety","16:10"],
+["2027-01-29","Willingen","Kwalifikacje","Mężczyźni","14:15"],
+["2027-01-29","Willingen","Mikst","Mężczyźni","16:10"],
+["2027-01-30","Willingen","Kwalifikacje","Kobiety","11:45"],
+["2027-01-30","Willingen","Konkurs indywidualny","Kobiety","13:45"],
+["2027-01-30","Willingen","Konkurs indywidualny","Mężczyźni","16:10"],
+["2027-01-31","Willingen","Konkurs indywidualny","Kobiety","13:15"],
+["2027-01-31","Willingen","Konkurs indywidualny","Mężczyźni","16:05"],
+
+["2027-02-05","Lake Placid","Konkurs indywidualny","Kobiety",""],
+["2027-02-06","Lake Placid","Konkurs indywidualny","Mężczyźni",""],
+["2027-02-07","Lake Placid","Mikst","Kobiety",""],
+["2027-02-07","Lake Placid","Mikst","Mężczyźni",""],
+["2027-02-11","Lahti","Konkurs indywidualny","Kobiety",""],
+["2027-02-12","Lahti","Konkurs indywidualny","Kobiety",""],
+["2027-02-13","Lahti","Konkurs drużynowy","Mężczyźni",""],
+["2027-02-14","Lahti","Konkurs indywidualny","Mężczyźni",""],
+["2027-02-18","Vikersund","Kwalifikacje","Kobiety","14:15"],
+["2027-02-18","Vikersund","Kwalifikacje","Mężczyźni",""],
+["2027-02-19","Vikersund","Kwalifikacje","Mężczyźni","16:15"],
+["2027-02-20","Vikersund","Konkurs indywidualny","Kobiety",""],
+["2027-02-20","Vikersund","Konkurs indywidualny","Mężczyźni","15:30"],
+["2027-02-21","Vikersund","Konkurs indywidualny","Mężczyźni","14:50"],
+["2027-02-20","Villach","Konkurs indywidualny","Kobiety",""],
+["2027-02-21","Villach","Konkurs indywidualny","Kobiety",""],
+
+["2027-02-25","Falun","Konkurs drużynowy","Kobiety",""],
+["2027-02-26","Falun","Konkurs indywidualny","Kobiety",""],
+["2027-02-27","Falun","Mikst","Kobiety",""],
+["2027-02-27","Falun","Mikst","Mężczyźni",""],
+["2027-02-27","Falun","Mikst","Drużynowy",""],
+["2027-02-28","Falun","Konkurs indywidualny","Mężczyźni",""],
+["2027-03-04","Falun","Konkurs drużynowy","Mężczyźni",""],
+["2027-03-05","Falun","Konkurs indywidualny","Kobiety",""],
+["2027-03-06","Falun","Konkurs indywidualny","Mężczyźni",""],
+["2027-03-13","Oslo","Konkurs indywidualny","Kobiety",""],
+["2027-03-13","Oslo","Konkurs indywidualny","Mężczyźni",""],
+["2027-03-14","Oslo","Konkurs indywidualny","Kobiety",""],
+["2027-03-14","Oslo","Konkurs indywidualny","Mężczyźni",""],
+["2027-03-18","Planica","Kwalifikacje – loty","Mężczyźni","10:00"],
+["2027-03-19","Planica","Konkurs indywidualny – loty","Mężczyźni","15:00"],
+["2027-03-20","Planica","Konkurs drużynowy – loty","Mężczyźni","09:45"],
+["2027-03-20","Planica","Konkurs indywidualny – loty","Kobiety","15:30"],
+["2027-03-21","Planica","Konkurs indywidualny – loty","Mężczyźni","10:00"]
+];
+
+function seedSchedule(){
+if(read("skokiSnowSeed2027",false))return;
+const existing=events;
+snowSchedule.forEach((r,i)=>{
+const [date,place,kind,type,time]=r;
+const name="Puchar Świata – "+kind;
+const exists=existing.some(e=>e.date===date&&e.place===place&&e.type===type&&e.kind===kind&&e.source==="Snow-Online");
+if(exists)return;
+events.push({
+id:"snow-2027-"+i,name,date,time,place,category:"Puchar Świata",
+season:"Zima",type,kind,reminder:30,source:"Snow-Online"
+});
+});
+events.sort((a,b)=>(a.date+(a.time||"99:99")).localeCompare(b.date+(b.time||"99:99")));
+store("skokiEvents",events);
+store("skokiSnowSeed2027",true);
+}
 
 function show(id){
 document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===id));
@@ -204,140 +346,84 @@ scrollTo({top:0,behavior:"smooth"});
 }
 
 function resetEventForm(){
-["editEventId","eventName","eventDate","eventTime","eventPlace"].forEach(id=>document.getElementById(id).value="");
-eventReminder.value="30";
-eventSeason.value="Zima";
-eventFormTitle.textContent="Dodaj zawody do terminarza";
+["editEventId","eventName","eventDate","eventTime","eventPlace"].forEach(id=>$(id).value="");
+$("eventReminder").value="30";
+$("eventSeason").value="Zima";
+$("eventFormTitle").textContent="Dodaj zawody do terminarza";
 }
 
 function saveEvent(){
-const name=eventName.value.trim(),date=eventDate.value,time=eventTime.value,place=eventPlace.value.trim(),id=editEventId.value;
-if(!name||!date||!time||!place){alert("Uzupełnij nazwę, datę, godzinę i miejscowość.");return}
+const name=$("eventName").value.trim(),date=$("eventDate").value,time=$("eventTime").value,place=$("eventPlace").value.trim(),id=$("editEventId").value;
+if(!name||!date||!place){alert("Uzupełnij nazwę, datę i miejscowość.");return}
 const old=events.find(e=>e.id===id);
-const e={...(old||{}),id:id||String(Date.now()),name,date,time,place,category:eventCategory.value,season:eventSeason.value,type:eventType.value,kind:eventKind.value,reminder:+eventReminder.value};
+const e={...(old||{}),id:id||String(Date.now()),name,date,time,place,category:$("eventCategory").value,season:$("eventSeason").value,type:$("eventType").value,kind:$("eventKind").value,reminder:+$("eventReminder").value,source:old?.source||"Własny wpis"};
 events=id?events.map(x=>x.id===id?e:x):[...events,e];
-events.sort((a,b)=>(a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
-store("skokiEvents",events);
-resetEventForm();
-renderEvents();
-renderHome();
+events.sort((a,b)=>(a.date+(a.time||"99:99")).localeCompare(b.date+(b.time||"99:99")));
+store("skokiEvents",events);resetEventForm();renderEvents();renderHome();
 }
 
 function editEvent(id){
-const e=events.find(x=>x.id===id);
-if(!e)return;
-editEventId.value=e.id;
-eventName.value=e.name;
-eventDate.value=e.date;
-eventTime.value=e.time||"";
-eventPlace.value=e.place;
-eventCategory.value=e.category||"Puchar Świata";
-eventSeason.value=e.season||"Zima";
-eventType.value=e.type||"Mężczyźni";
-eventKind.value=e.kind||"Konkurs";
-eventReminder.value=String(e.reminder??30);
-eventFormTitle.textContent="Edytuj zawody";
-scrollTo(0,0);
+const e=events.find(x=>x.id===id);if(!e)return;
+$("editEventId").value=e.id;$("eventName").value=e.name;$("eventDate").value=e.date;
+$("eventTime").value=e.time||"";$("eventPlace").value=e.place;
+$("eventCategory").value=e.category||"Puchar Świata";
+$("eventSeason").value=e.season||"Zima";$("eventType").value=e.type||"Mężczyźni";
+$("eventKind").value=e.kind||"Konkurs";$("eventReminder").value=String(e.reminder??30);
+$("eventFormTitle").textContent="Edytuj zawody";scrollTo(0,0);
 }
 
 function deleteEvent(id){
 if(!confirm("Usunąć konkurs?"))return;
-events=events.filter(e=>e.id!==id);
-store("skokiEvents",events);
-renderEvents();
-renderHome();
+events=events.filter(e=>e.id!==id);store("skokiEvents",events);renderEvents();renderHome();
+}
+
+function formatDate(date){
+return new Date(date+"T12:00:00").toLocaleDateString("pl-PL",{day:"numeric",month:"long",year:"numeric"});
 }
 
 function renderEvents(){
-const cat=filterCategory.value,season=filterSeason.value,type=filterType.value,place=filterPlace.value.toLowerCase();
+const cat=$("filterCategory").value,season=$("filterSeason").value,type=$("filterType").value,place=$("filterPlace").value.toLowerCase();
 const list=events.filter(e=>(!cat||e.category===cat)&&(!season||e.season===season)&&(!type||e.type===type)&&(!place||(e.place||"").toLowerCase().includes(place)));
-eventList.innerHTML=list.length?list.map(e=>`<div class="card"><div class="row"><div><span class="tag">${esc(e.season||"")} • ${esc(e.category||"")}</span><h3>${esc(e.name)}</h3><p class="muted">${esc(e.place)} • ${esc(e.type||"")}</p></div><div class="eventtime">${esc(e.time||"—")}</div></div><p class="muted">📅 ${esc(e.date)} • Przypomnienie: ${e.reminder?e.reminder+" min":"wyłączone"}</p><button class="secondary" onclick="editEvent('${esc(e.id)}')">Edytuj</button><button class="secondary" onclick="deleteEvent('${esc(e.id)}')">Usuń</button></div>`).join(""):'<div class="card">Brak konkursów. Dodaj ręcznie lub zaimportuj plik FIS.</div>';
+$("eventList").innerHTML=list.length?list.map(e=>`<div class="card">
+<div class="row"><div><span class="tag">${esc(e.season||"")} • ${esc(e.category||"")}</span>
+<h3>${esc(e.name)}</h3><p class="muted">${esc(e.place)} • ${esc(e.type||"")} • ${esc(e.kind||"")}</p></div>
+<div class="eventtime">${esc(e.time||"—")}</div></div>
+<p class="muted">📅 ${formatDate(e.date)} • Przypomnienie: ${e.reminder?e.reminder+" min":"wyłączone"}</p>
+<p class="muted">Źródło: ${esc(e.source||"Własny wpis")}</p>
+<button class="secondary" onclick="editEvent('${esc(e.id)}')">Edytuj</button>
+<button class="secondary" onclick="deleteEvent('${esc(e.id)}')">Usuń</button></div>`).join(""):'<div class="card">Brak konkursów spełniających wybrane filtry.</div>';
 }
 
 function renderHome(){
-const a=events.filter(e=>new Date(e.date+"T"+(e.time||"23:59"))>=new Date()).sort((x,y)=>(x.date+x.time).localeCompare(y.date+y.time)).slice(0,3);
-homeNextEvents.innerHTML=a.length?a.map(e=>`<div class="row"><b>${esc(e.name)}<div class="muted">${esc(e.place)} • ${esc(e.date)}</div></b><span class="eventtime">${esc(e.time||"—")}</span></div>`).join("")+'<button onclick="show(\'calendar\')">Cały terminarz</button>':'<p class="muted">Brak nadchodzących zawodów.</p><button onclick="show(\'calendar\')">Dodaj zawody</button>';
-}
-
-function unescapeICS(s){
-return String(s||"").replace(/\\n/gi," ").replace(/\\,/g,",").replace(/\\;/g,";").replace(/\\\\/g,"\\").trim();
-}
-function icsField(lines,key){
-return lines.find(x=>new RegExp("^"+key+"(?:;[^:]*)?:","i").test(x))||"";
-}
-function icsDate(line){
-const m=line.match(/:(\d{8})(?:T(\d{6})Z?)?/);
-if(!m)return null;
-return {date:m[1].slice(0,4)+"-"+m[1].slice(4,6)+"-"+m[1].slice(6,8),time:m[2]?m[2].slice(0,2)+":"+m[2].slice(2,4):""};
-}
-
-function importICS(file){
-if(!file)return;
-const status=document.getElementById("importStatus"),reader=new FileReader();
-reader.onload=()=>{
-try{
-const raw=String(reader.result||"").replace(/\r?\n[ \t]/g,"");
-const blocks=raw.split(/BEGIN:VEVENT/i).slice(1).map(x=>x.split(/END:VEVENT/i)[0]);
-let added=0,updated=0;
-blocks.forEach(block=>{
-const lines=block.split(/\r?\n/),s=icsField(lines,"SUMMARY"),d=icsField(lines,"DTSTART"),p=icsField(lines,"LOCATION"),u=icsField(lines,"UID");
-if(!s||!d)return;
-const dt=icsDate(d);
-if(!dt)return;
-const name=unescapeICS(s.slice(s.indexOf(":")+1));
-const place=unescapeICS(p?p.slice(p.indexOf(":")+1):"FIS");
-const uid=u?unescapeICS(u.slice(u.indexOf(":")+1)):"";
-const old=events.find(e=>(uid&&e.fisUid===uid)||(e.date===dt.date&&e.name.toLowerCase()===name.toLowerCase()&&String(e.place).toLowerCase()===place.toLowerCase()));
-const id=old?old.id:"fis-"+(uid||dt.date+name+place).replace(/[^a-z0-9_-]/gi,"").slice(0,90);
-const category=/grand prix|\bGP\b/i.test(name)?"Letnie Grand Prix":/continental|\bCOC\b|\bICOC\b/i.test(name)?"Puchar Kontynentalny":/fis cup|\bFC\b/i.test(name)?"FIS Cup":/world cup|\bWC\b|four hill/i.test(name)?"Puchar Świata":"Inne zawody FIS";
-const e={...(old||{}),id,name,date:dt.date,time:old?.time||dt.time||"",place,category:old?.category||category,season:old?.season||(["06","07","08","09"].includes(dt.date.slice(5,7))?"Lato":"Zima"),type:old?.type||"Inny",kind:old?.kind||"Konkurs",reminder:old?.reminder??30,fisUid:uid};
-if(old)updated++;
-else added++;
-if(old)events=events.map(x=>x.id===old.id?e:x);
-else events.push(e);
-});
-events.sort((a,b)=>(a.date+(a.time||"")).localeCompare(b.date+(b.time||"")));
-store("skokiEvents",events);
-renderEvents();
-renderHome();
-status.textContent=`Import zakończony. Dodano: ${added}. Zaktualizowano: ${updated}. Sprawdź godziny startu.`;
-}catch(err){
-status.textContent="Nie udało się odczytać pliku ICS. Spróbuj pobrać go ponownie z FIS.";
-}
-};
-reader.readAsText(file,"UTF-8");
+const a=events.filter(e=>new Date(e.date+"T"+(e.time||"23:59"))>=new Date()).sort((x,y)=>(x.date+(x.time||"99:99")).localeCompare(y.date+(y.time||"99:99"))).slice(0,3);
+$("homeNextEvents").innerHTML=a.length?a.map(e=>`<div class="row"><b>${esc(e.name)}<div class="muted">${esc(e.place)} • ${formatDate(e.date)} • ${esc(e.type)}</div></b><span class="eventtime">${esc(e.time||"—")}</span></div>`).join("")+'<button onclick="show(\'calendar\')">Cały terminarz</button>':'<p class="muted">Brak nadchodzących zawodów.</p><button onclick="show(\'calendar\')">Otwórz terminarz</button>';
 }
 
 function addResult(){
-const event=resultEvent.value.trim(),winner=resultWinner.value.trim(),score=resultScore.value.trim();
+const event=$("resultEvent").value.trim(),winner=$("resultWinner").value.trim(),score=$("resultScore").value.trim();
 if(!event||!winner||!score){alert("Uzupełnij wszystkie pola.");return}
 savedResults.unshift({id:String(Date.now()),event,winner,score});
 store("skokiResults",savedResults);
-resultEvent.value=resultWinner.value=resultScore.value="";
+$("resultEvent").value=$("resultWinner").value=$("resultScore").value="";
 renderResults();
 }
 function deleteResult(id){
-savedResults=savedResults.filter(x=>x.id!==id);
-store("skokiResults",savedResults);
-renderResults();
+savedResults=savedResults.filter(x=>x.id!==id);store("skokiResults",savedResults);renderResults();
 }
 function renderResults(){
-const list=document.getElementById("savedResults");
-list.innerHTML=savedResults.map(r=>`<div class="row"><span><b>${esc(r.event)}</b><div class="muted">${esc(r.winner)} • ${esc(r.score)}</div></span><button class="secondary" onclick="deleteResult('${esc(r.id)}')">Usuń</button></div>`).join("")||'<p class="muted">Brak zapisanych wyników.</p>';
+$("savedResults").innerHTML=savedResults.map(r=>`<div class="row"><span><b>${esc(r.event)}</b><div class="muted">${esc(r.winner)} • ${esc(r.score)}</div></span><button class="secondary" onclick="deleteResult('${esc(r.id)}')">Usuń</button></div>`).join("")||'<p class="muted">Brak zapisanych wyników.</p>';
 }
 
 function renderAthletes(){
-const q=athleteSearch.value.toLowerCase();
-athleteList.innerHTML=athletes.filter(a=>a.join(" ").toLowerCase().includes(q)).map(a=>`<div class="card row"><span>${a[1]} <b>${a[0]}</b><div class="muted">${a[2]}</div></span><button class="secondary" onclick="toggleFav('${a[0]}')">${fav.includes(a[0])?"Usuń z ulubionych":"Dodaj do ulubionych"}</button></div>`).join("");
+const q=$("athleteSearch").value.toLowerCase();
+$("athleteList").innerHTML=athletes.filter(a=>a.join(" ").toLowerCase().includes(q)).map(a=>`<div class="card row"><span>${a[1]} <b>${a[0]}</b><div class="muted">${a[2]}</div></span><button class="secondary" onclick="toggleFav('${a[0]}')">${fav.includes(a[0])?"Usuń z ulubionych":"Dodaj do ulubionych"}</button></div>`).join("");
 }
 function toggleFav(name){
 fav=fav.includes(name)?fav.filter(x=>x!==name):[...fav,name];
-store("skokiFav",fav);
-renderAthletes();
-renderFav();
+store("skokiFav",fav);renderAthletes();renderFav();
 }
 function renderFav(){
-favoriteList.innerHTML=fav.length?fav.map(n=>`<div class="row"><b>${esc(n)}</b><button class="secondary" onclick="toggleFav('${esc(n)}')">Usuń</button></div>`).join(""):"Nie masz jeszcze ulubionych zawodników.";
+$("favoriteList").innerHTML=fav.length?fav.map(n=>`<div class="row"><b>${esc(n)}</b><button class="secondary" onclick="toggleFav('${esc(n)}')">Usuń</button></div>`).join(""):"Nie masz jeszcze ulubionych zawodników.";
 }
 
 const hills=[
@@ -359,54 +445,32 @@ if([95,96,99].includes(c))return"Burza";
 return"Warunki zmienne";
 }
 
-/* POPRAWIONA FUNKCJA POGODY */
 async function loadWeather(){
-const updated=document.getElementById("weather-updated");
-if(updated)updated.textContent="Pobieranie prognozy...";
-
+const updated=$("weather-updated");
+updated.textContent="Pobieranie prognozy...";
 await Promise.all(hills.map(async h=>{
-const box=document.getElementById("weather-"+h.id);
-if(!box)return;
-
+const box=$("weather-"+h.id);
 try{
 const url=`https://api.open-meteo.com/v1/forecast?latitude=${h.lat}&longitude=${h.lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m,wind_direction_10m&timezone=auto`;
 const response=await fetch(url);
-if(!response.ok)throw new Error("Błąd pobierania pogody");
-
-const data=await response.json();
-const c=data.current;
-if(!c)throw new Error("Brak danych pogodowych");
-
-box.innerHTML=`
-<div class="eventtime">${Math.round(c.temperature_2m)}°C</div>
+if(!response.ok)throw new Error("Błąd połączenia");
+const data=await response.json(),c=data.current;
+if(!c)throw new Error("Brak danych");
+box.innerHTML=`<div class="eventtime">${Math.round(c.temperature_2m)}°C</div>
 <b>${weatherText(c.weather_code)}</b>
-<p class="muted">
-Odczuwalna: ${Math.round(c.apparent_temperature)}°C<br>
+<p class="muted">Odczuwalna: ${Math.round(c.apparent_temperature)}°C<br>
 Wiatr: ${Math.round(c.wind_speed_10m)} km/h (${Math.round(c.wind_direction_10m)}°)<br>
-Wilgotność: ${c.relative_humidity_2m}%<br>
-Opady: ${c.precipitation} mm
-</p>`;
-}catch(error){
-box.textContent="Nie udało się pobrać pogody. Spróbuj ponownie.";
-}
+Wilgotność: ${c.relative_humidity_2m}%<br>Opady: ${c.precipitation} mm</p>`;
+}catch(error){box.textContent="Nie udało się pobrać pogody. Spróbuj ponownie.";}
 }));
-
-if(updated){
 updated.textContent="Ostatnia aktualizacja: "+new Date().toLocaleTimeString("pl-PL");
 }
-}
-
-setInterval(loadWeather,15*60*1000);
 
 async function enableNotifications(){
-if(!("Notification"in window)){
-alert("Ta przeglądarka nie obsługuje powiadomień.");
-return;
-}
+if(!("Notification"in window)){alert("Ta przeglądarka nie obsługuje powiadomień.");return;}
 const p=await Notification.requestPermission();
 alert(p==="granted"?"Powiadomienia włączone.":"Nie przyznano zgody.");
 }
-
 function checkReminders(){
 if(!("Notification"in window)||Notification.permission!=="granted")return;
 const now=Date.now();
@@ -416,20 +480,16 @@ const start=new Date(e.date+"T"+e.time).getTime();
 const key=e.id+"-"+e.date+"-"+e.time+"-"+e.reminder;
 if(now>=start-e.reminder*60000&&now<start&&!notified.includes(key)){
 new Notification("Nadchodzą skoki narciarskie!",{body:e.name+" • "+e.place+" • start "+e.time});
-notified.push(key);
-store("skokiNotified",notified);
+notified.push(key);store("skokiNotified",notified);
 }
 });
 }
 
-setInterval(checkReminders,30000);
-
-renderEvents();
-renderHome();
-renderResults();
-renderAthletes();
-renderFav();
+seedSchedule();
+renderEvents();renderHome();renderResults();renderAthletes();renderFav();
 loadWeather();
+setInterval(loadWeather,15*60*1000);
+setInterval(checkReminders,30000);
 </script>
 </body>
 </html>
