@@ -791,6 +791,136 @@ const venueCoords = {
 };
 
 function weatherDescription(code) {
+  
+async function loadNextEventWeather() {
+  const box = $("nextVenueWeather");
+  if (!box) return;
+
+  const today = new Date().toLocaleDateString("en-CA");
+  const upcoming = [...events]
+    .filter(e => e.date && e.date >= today)
+    .sort((a,b) => a.date.localeCompare(b.date))[0];
+
+  if (!upcoming) {
+    box.innerHTML = `
+      <h3>🌦️ Pogoda na najbliższe zawody</h3>
+      <p class="muted">Dodaj zawody w terminarzu, a pokażemy prognozę dla ich miejscowości.</p>
+    `;
+    return;
+  }
+
+  box.innerHTML = `
+    <h3>🌦️ Pogoda na najbliższe zawody</h3>
+    <p class="muted">Pobieranie prognozy dla ${esc(upcoming.place)}...</p>
+  `;
+
+  try {
+    const placeText = upcoming.place.toLowerCase();
+
+    let coords = null;
+    let venueName = upcoming.place;
+
+    // Najpierw sprawdzamy znane skocznie.
+    for (const [name, location] of Object.entries(venueCoords)) {
+      if (placeText.includes(name.toLowerCase())) {
+        coords = location;
+        venueName = name;
+        break;
+      }
+    }
+
+    // Jeśli miejscowości nie ma na liście, szukamy jej przez geokodowanie.
+    if (!coords) {
+      const geoUrl =
+        "https://geocoding-api.open-meteo.com/v1/search?name=" +
+        encodeURIComponent(upcoming.place) +
+        "&count=1&language=pl&format=json";
+
+      const geoResponse = await fetch(geoUrl);
+      if (!geoResponse.ok) throw new Error("Nie znaleziono miejscowości");
+
+      const geoData = await geoResponse.json();
+      const location = geoData.results?.[0];
+
+      if (!location) throw new Error("Nie znaleziono miejscowości");
+
+      coords = {
+        lat: location.latitude,
+        long: location.longitude
+      };
+      venueName = location.name;
+    }
+
+    const forecastUrl =
+      "https://api.open-meteo.com/v1/forecast" +
+      `?latitude=${coords.lat}&longitude=${coords.long}` +
+      "&daily=weather_code,temperature_2m_max,temperature_2m_min," +
+      "precipitation_probability_max,wind_speed_10m_max,snowfall_sum" +
+      "&forecast_days=16&timezone=auto";
+
+    const response = await fetch(forecastUrl);
+    if (!response.ok) throw new Error("Błąd prognozy");
+
+    const data = await response.json();
+    const dayIndex = data.daily.time.indexOf(upcoming.date);
+
+    if (dayIndex === -1) {
+      box.innerHTML = `
+        <h3>🌦️ Pogoda na najbliższe zawody</h3>
+        <b>${esc(upcoming.name)}</b>
+        <p class="muted">${esc(venueName)} • ${esc(formatDate(upcoming.date))}</p>
+        <p>Prognoza na ten dzień nie jest jeszcze dostępna.</p>
+        <p class="muted">Prognoza Open-Meteo obejmuje maksymalnie 16 dni.</p>
+      `;
+      return;
+    }
+
+    const daily = data.daily;
+    const code = daily.weather_code[dayIndex];
+
+    box.innerHTML = `
+      <h3>🌦️ Pogoda na najbliższe zawody</h3>
+      <div class="muted">${esc(upcoming.name)}</div>
+      <b>${esc(venueName)}</b>
+      <div class="eventtime">${esc(formatDate(upcoming.date))}</div>
+      <p>${esc(weatherDescription(code))}</p>
+      <div class="profile-grid">
+        <div class="profile-stat">
+          <span class="muted">Temperatura maks.</span>
+          <b>${daily.temperature_2m_max[dayIndex]}°C</b>
+        </div>
+        <div class="profile-stat">
+          <span class="muted">Temperatura min.</span>
+          <b>${daily.temperature_2m_min[dayIndex]}°C</b>
+        </div>
+        <div class="profile-stat">
+          <span class="muted">Maks. wiatr</span>
+          <b>${daily.wind_speed_10m_max[dayIndex]} km/h</b>
+        </div>
+        <div class="profile-stat">
+          <span class="muted">Szansa opadów</span>
+          <b>${daily.precipitation_probability_max[dayIndex] ?? "—"}%</b>
+        </div>
+        <div class="profile-stat">
+          <span class="muted">Śnieg</span>
+          <b>${daily.snowfall_sum[dayIndex]} cm</b>
+        </div>
+      </div>
+      <p class="muted">Prognoza dobowa • Open-Meteo</p>
+    `;
+  } catch (error) {
+    box.innerHTML = `
+      <h3>🌦️ Pogoda na najbliższe zawody</h3>
+      <b>${esc(upcoming.name)}</b>
+      <p class="muted">${esc(upcoming.place)} • ${esc(formatDate(upcoming.date))}</p>
+      <p>Nie udało się pobrać prognozy. Spróbuj ponownie później.</p>
+      <button class="secondary" id="retryNextWeather">Odśwież</button>
+    `;
+
+    $("retryNextWeather")?.addEventListener("click", loadNextEventWeather);
+  }
+}
+
   const descriptions = {
     0:"Bezchmurnie",1:"Przeważnie pogodnie",2:"Częściowe zachmurzenie",3:"Pochmurno",
     45:"Mgła",48:"Mgła osadzająca szadź",51:"Lekka mżawka",53:"Umiarkowana mżawka",
